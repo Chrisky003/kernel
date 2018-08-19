@@ -1,4 +1,4 @@
-﻿PROJECT = ../..
+PROJECT = ../..
 WORKING = $(PROJECT)/project/kernel
 TOOLS = $(PROJECT)/tools
 OBJPATH = $(WORKING)/obj
