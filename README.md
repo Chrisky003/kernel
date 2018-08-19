@@ -1,2 +1,2 @@
 # kernel
-Learn to make a kernel!(
+Learn to make a kernel!
