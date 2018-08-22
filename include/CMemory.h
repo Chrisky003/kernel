@@ -9,7 +9,7 @@ public:
 public:
 	void init_gdt();
 private:
-	static void get_set_gate(int num, dword base, int limit, byte access, byte gran);
+	void gdt_set_gate(int num, dword base, dword limit, byte access, byte gran);
 public:
 	// 全局描述符表长度
 	#define GDT_LENGTH 5

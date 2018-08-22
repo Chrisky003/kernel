@@ -13,4 +13,5 @@ public:
 	void run();
 public:
 	CMemory memory;
+	multiboot_t *mb;
 };

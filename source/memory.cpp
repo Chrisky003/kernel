@@ -79,7 +79,7 @@ namespace memory
 	{
 		union{int* p; int data;} uni;
 		uni.p = (int*)p;
-		return data;
+		return uni.data;
 	}
 
 }
