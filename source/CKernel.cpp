@@ -1,7 +1,8 @@
 #include "CKernel.h"
 #include "real_console.h"
 
-CKernel::CKernel(multiboot_t *mb)
+CKernel::CKernel(multiboot_t *mb):
+	memory(mb)
 {
 	
 }

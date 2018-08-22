@@ -13,4 +13,5 @@ namespace memory
 	void memset(void *src, byte data, int size);
 	void zeromem(void *src, int size);
 	int *intToPointer(int i);
+	int pointerToInt(void *p);
 }

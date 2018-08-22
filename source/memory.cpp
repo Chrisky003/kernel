@@ -75,4 +75,11 @@ namespace memory
 		return uni.p;
 	}
 
+	int pointerToInt(void *p)
+	{
+		union{int* p; int data;} uni;
+		uni.p = (int*)p;
+		return data;
+	}
+
 }

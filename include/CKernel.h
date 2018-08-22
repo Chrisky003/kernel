@@ -1,4 +1,6 @@
 #include "def.h"
+#include "CMemory.h"
+
 int entry(multiboot_t *mb);
 
 class CKernel
@@ -9,4 +11,6 @@ public:
 	~CKernel();
 public:
 	void run();
+public:
+	CMemory memory;
 };
