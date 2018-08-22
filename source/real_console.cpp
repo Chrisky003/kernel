@@ -110,7 +110,7 @@ namespace real_console
 		
 	static int vsprintf(char *buff, const char *format, va_list args);
 
-	void printk(const char *format, ...)
+	void print(const char *format, ...)
 	{
 		// 避免频繁创建临时变量，内核的栈很宝贵
 		static char buff[1024];
@@ -123,10 +123,10 @@ namespace real_console
 
 		buff[i] = '\0';
 
-		real_console::puts(buff);
+		puts(buff);
 	}
 
-	void printk_color(real_console::color back, \
+	void print_color(real_console::color back, \
 		real_console::color fore, const char *format, ...)
 	{
 		// 避免频繁创建临时变量，内核的栈很宝贵

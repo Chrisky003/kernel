@@ -27,6 +27,6 @@ namespace real_console
 	void scroll();
 	void putc(const char c, const color back = color::black, const color fore = color::white);
 	void puts(const char *str, const color back = color::black, const color fore = color::white);
-	void printk(const char *format, ...);
-	void printk_color(real_console::color back, real_console::color fore, const char *format, ...);
+	void print(const char *format, ...);
+	void print_color(real_console::color back, real_console::color fore, const char *format, ...);
 }
