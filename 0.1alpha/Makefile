@@ -1,12 +1,11 @@
 MAJOR_VERSION_NUMBER = 0
 MINOR_VERSION_NUMBER = 1
 VERSION = alpha
-PROJECT = ../..
-WORKING = $(PROJECT)/git/kernel
-TOOLS = $(PROJECT)/tools
-OBJPATH = $(WORKING)/obj
-BUILD = $(WORKING)/build
+NAME = kernel-$(MAJOR_VERSION_NUMBER).$(MINOR_VERSION_NUMBER)-$(VERSION)
+PROJECT = ..
+WORKING = $(PROJECT)/$(MAJOR_VERSION_NUMBER).$(MINOR_VERSION_NUMBER)$(VERSION)
 SOURCEPATH = $(WORKING)/source
+BUILDPATH = $(PROJECT)/build
 
 ASM = nasm
 CC = gcc
@@ -15,8 +14,7 @@ LD = ld
 MAKE = make
 
 SOURCES := $(SOURCEPATH)/entry.s $(filter-out $(SOURCEPATH)/entry.s, $(wildcard $(SOURCEPATH)/*.*))
-OBJECTS := $(subst $(SOURCEPATH), $(OBJPATH), $(patsubst %.s, %.o ,$(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCES)))))
-#$(patsubst %.s, %.o ,$(patsubst %.c, %.o, $(SOURCES)))
+OBJECTS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, &(patsubst %.s, %.o, $(SOURCES))))
 
 #无调试:
 #C_FLAGS = -c -Wall -m32 -nostdinc -fno-builtin -fno-stack-protector -I include/
@@ -32,9 +30,9 @@ ASM_FLAGS = -f elf -g -F stabs
 all: 
 	@$(MAKE) build/kernel
 	
-build/kernel: $(patsubst %.s, %.o ,$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(SOURCES))))
-	@echo LD  $(subst $(WORKING)/,, $(BUILD)/kernel)
-	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILD)/kernel
+build/kernel: $(OBJECTS)
+	@echo LD  $(subst $(WORKING)/,, $(BUILD)/$(NAME))
+	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILD)/$(NAME)
 	
 .PHONY: build
 build:
@@ -42,21 +40,21 @@ build:
 
 %.o: %.cpp
 	@echo CPP  $(subst $(WORKING)/,, $<)
-	@$(CPP) $(C_FLAGS) $< -o $(OBJPATH)/$(notdir $@)
+	@$(CPP) $(C_FLAGS) $< -o $@
 
 %.o: %.s
 	@echo AS  $(subst $(WORKING)/,, $<)
-	@$(ASM) $(ASM_FLAGS) $< -o $(OBJPATH)/$(notdir $@)
+	@$(ASM) $(ASM_FLAGS) $< -o $@
 
 
 %.o: %.c
 	@echo CC  $(subst $(WORKING)/,, $<)
-	@$(CC) $(C_FLAGS) $< -o $(OBJPATH)/$(notdir $@)
+	@$(CC) $(C_FLAGS) $< -o $@
 
 .PHONY: install
 install:
 	@$(MAKE) mount
-	@sudo cp build/kernel /mnt/boot/kernel
+	@sudo cp $(BUILDPATH)/$(NAME) /mnt/boot/kernel
 	@sleep 1
 	@$(MAKE) umount
 
@@ -75,17 +73,15 @@ run:build/kernel
 
 .PHONY:debug
 debug:build/kernel
-	@qemu-system-i386 -S -s -hda /dev/sdb1 &
+	@qemu-system-i386 -S -s -hda /dev/sdb &
 	@sleep 1
 	@gdb -tui -x scripts/gdbinit
 
 .PHONY: clean
 clean:
-	@echo RM   $(subst $(WORKING)/,, $(OBJPATH)/*.*)
-	@rm -rf $(OBJPATH)/*.*
-	@rm -rf $(OBJPATH)/*
-	@echo RM   $(subst $(WORKING)/,, $(BUILD)/*.*)
-	@rm -rf $(BUILD)/*.*
-	@rm -rf $(BUILD)/*	
+	@echo RM   $(subst $(WORKING)/,, $(SOURCES)/*.o)
+	@rm -rf $(SOURCEPATH)/*.o
+	@echo RM   $(NAME)
+	@rm -rf $(BUILDPATH)/$(NAME)
 	@echo 清理完成!
 
