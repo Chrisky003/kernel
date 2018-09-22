@@ -13,8 +13,8 @@ CPP = g++
 LD = ld
 MAKE = make
 
-SOURCES := $(SOURCEPATH)/entry.s $(filter-out $(SOURCEPATH)/entry.s, $(wildcard $(SOURCEPATH)/*.*))
-OBJECTS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, &(patsubst %.s, %.o, $(SOURCES))))
+SOURCES = $(SOURCEPATH)/entry.s $(filter-out $(SOURCEPATH)/entry.s, $(wildcard $(SOURCEPATH)/*.*))
+OBJECTS = $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(patsubst %.s, %.o, $(SOURCES))))
 
 #无调试:
 #C_FLAGS = -c -Wall -m32 -nostdinc -fno-builtin -fno-stack-protector -I include/
@@ -28,14 +28,15 @@ ASM_FLAGS = -f elf -g -F stabs
 
 .PNONY: all
 all: 
-	@$(MAKE) build/kernel
+	@$(MAKE) build
 	
 build/kernel: $(OBJECTS)
-	@echo LD  $(subst $(WORKING)/,, $(BUILD)/$(NAME))
-	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILD)/$(NAME)
+	@echo LD  $(subst $(WORKING)/,, $(BUILDPATH)/$(NAME))
+	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILDPATH)/$(NAME)
 	
 .PHONY: build
 build:
+	@rm -rf $(SOURCEPATH)/*.o
 	@$(MAKE) build/kernel
 
 %.o: %.cpp
