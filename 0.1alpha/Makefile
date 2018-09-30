@@ -33,10 +33,11 @@ all:
 build/kernel: $(OBJECTS)
 	@echo LD  $(subst $(WORKING)/,, $(BUILDPATH)/$(NAME))
 	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILDPATH)/$(NAME)
+	@$(MAKE) clean
 	
 .PHONY: build
 build:
-	@rm -rf $(SOURCEPATH)/*.o
+#	@rm -rf $(SOURCEPATH)/*.o
 	@$(MAKE) build/kernel
 
 %.o: %.cpp
@@ -68,7 +69,7 @@ umount:
 	@sudo umount /mnt
 	
 .PHONY: run
-run:build/kernel
+run: build/kernel
 	@$(MAKE) install
 	@sudo qemu-system-i386 -hda /dev/sdb
 
@@ -80,9 +81,19 @@ debug:build/kernel
 
 .PHONY: clean
 clean:
-	@echo RM   $(subst $(WORKING)/,, $(SOURCES)/*.o)
+	@echo RM   $(subst $(WORKING)/,, $(SOURCEPATH)/*.o)
 	@rm -rf $(SOURCEPATH)/*.o
+	@echo 清理完成!
+
+.PHONY:clean_all
+clean_all:
 	@echo RM   $(NAME)
 	@rm -rf $(BUILDPATH)/$(NAME)
 	@echo 清理完成!
 
+PHONY += FORCE
+FORCE:
+
+# Declare the contents of the .PHONY variable as phony.  We keep that
+# information in a variable so we can use it in if_changed and friends.
+.PHONY: $(PHONY)
