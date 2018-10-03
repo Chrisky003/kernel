@@ -31,6 +31,7 @@ all:
 	@$(MAKE) build
 	
 build/kernel: $(OBJECTS)
+	@$(MAKE) clean_build
 	@echo LD  $(subst $(WORKING)/,, $(BUILDPATH)/$(NAME))
 	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILDPATH)/$(NAME)
 	@$(MAKE) clean
@@ -40,17 +41,20 @@ build:
 #	@rm -rf $(SOURCEPATH)/*.o
 	@$(MAKE) build/kernel
 
-%.o: %.cpp
+%.o: %.cpp FORCE
 	@echo CPP  $(subst $(WORKING)/,, $<)
+	@rm -rf $@
 	@$(CPP) $(C_FLAGS) $< -o $@
 
-%.o: %.s
+%.o: %.s FORCE
 	@echo AS  $(subst $(WORKING)/,, $<)
+	@rm -rf $@
 	@$(ASM) $(ASM_FLAGS) $< -o $@
 
 
-%.o: %.c
+%.o: %.c FORCE
 	@echo CC  $(subst $(WORKING)/,, $<)
+	@rm -rf $@
 	@$(CC) $(C_FLAGS) $< -o $@
 
 .PHONY: install
@@ -85,8 +89,8 @@ clean:
 	@rm -rf $(SOURCEPATH)/*.o
 	@echo 清理完成!
 
-.PHONY:clean_all
-clean_all:
+.PHONY:clean_build
+clean_build:
 	@echo RM   $(NAME)
 	@rm -rf $(BUILDPATH)/$(NAME)
 	@echo 清理完成!
