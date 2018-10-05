@@ -1,7 +1,8 @@
+#pragma once
 #include "def.h"
 #include "CMemory.h"
 
-int entry(multiboot_t *mb);
+extern "C" int entry(multiboot_t *mb);
 
 class CKernel
 {

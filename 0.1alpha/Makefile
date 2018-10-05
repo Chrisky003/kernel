@@ -13,14 +13,14 @@ CPP = g++
 LD = ld
 MAKE = make
 
-SOURCES = $(SOURCEPATH)/entry.s $(filter-out $(SOURCEPATH)/entry.s, $(wildcard $(SOURCEPATH)/*.*))
+SOURCES = $(SOURCEPATH)/entry.s $(filter-out $(SOURCEPATH)/entry.s, $(patsubst %.o,, $(wildcard $(SOURCEPATH)/*.*)))
 OBJECTS = $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(patsubst %.s, %.o, $(SOURCES))))
 
 #无调试:
 #C_FLAGS = -c -Wall -m32 -nostdinc -fno-builtin -fno-stack-protector -I include/
 #调试:
 C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector -I include/
-LD_FLAGS = -T $(WORKING)/scripts/kernel.ld -m elf_i386 -nostdlib --oformat=elf32-i386
+LD_FLAGS = -T $(WORKING)/scripts/kernel.ld -m i386pe -nostdlib
 #无调试:
 #ASM_FLAGS = -f elf
 #调试:
@@ -31,10 +31,10 @@ all:
 	@$(MAKE) build
 	
 build/kernel: $(OBJECTS)
-	@$(MAKE) clean_build
+#	@$(MAKE) clean_build
 	@echo LD  $(subst $(WORKING)/,, $(BUILDPATH)/$(NAME))
 	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILDPATH)/$(NAME)
-	@$(MAKE) clean
+#	@$(MAKE) clean
 	
 .PHONY: build
 build:
@@ -43,18 +43,15 @@ build:
 
 %.o: %.cpp FORCE
 	@echo CPP  $(subst $(WORKING)/,, $<)
-	@rm -rf $@
 	@$(CPP) $(C_FLAGS) $< -o $@
 
 %.o: %.s FORCE
 	@echo AS  $(subst $(WORKING)/,, $<)
-	@rm -rf $@
 	@$(ASM) $(ASM_FLAGS) $< -o $@
 
 
 %.o: %.c FORCE
 	@echo CC  $(subst $(WORKING)/,, $<)
-	@rm -rf $@
 	@$(CC) $(C_FLAGS) $< -o $@
 
 .PHONY: install

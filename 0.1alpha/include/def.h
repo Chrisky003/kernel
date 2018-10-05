@@ -6,23 +6,15 @@ typedef char byte;
 typedef __builtin_va_list va_list;
 
 #define NULL 0
-#define va_start(ap, last)         (__builtin_va_start(ap, last))
-#define va_arg(ap, type)           (__builtin_va_arg(ap, type))
+#define va_start(ap, last)		 (__builtin_va_start(ap, last))
+#define va_arg(ap, type)		   (__builtin_va_arg(ap, type))
 #define va_end(ap)
 
 class POINT
 {
 public:
-	POINT()
-	{
-		this->x = 0;
-		this->y = 0;
-	}
-	POINT(int x, int y)
-	{
-		this->x = x;
-		this->y = y;
-	}
+	POINT();
+	POINT(int x, int y);
 public:
 	int x,y;
 };
@@ -79,12 +71,12 @@ typedef struct multiboot_t
 // 全局描述符类型
 typedef
 struct gdt_entry_t {
-	word limit_low;     // 段界限   15～0
-	word base_low;      // 段基地址 15～0
+	word limit_low;	 // 段界限   15～0
+	word base_low;	  // 段基地址 15～0
 	byte  base_middle;   // 段基地址 23～16
-	byte  access;        // 段存在位、描述符特权级、描述符类型、描述符子类别
+	byte  access;		// 段存在位、描述符特权级、描述符类型、描述符子类别
 	byte  granularity; 	// 其他标志、段界限 19～16
-	byte  base_high;     // 段基地址 31～24
+	byte  base_high;	 // 段基地址 31～24
 } __attribute__((packed)) gdt_entry_t;
 
 // GDTR
@@ -93,3 +85,38 @@ struct gdt_ptr_t {
 	word limit; 	// 全局描述符表限长
 	dword base; 		// 全局描述符表 32位 基地址
 } __attribute__((packed)) gdt_ptr_t;
+
+// ELF 格式区段头
+typedef
+struct elf_section_header_t {
+	dword name;
+	dword type;
+	dword flags;
+	dword addr;
+	dword offset;
+	dword size;
+	dword link;
+	dword info;
+	dword addralign;
+	dword entsize;
+} __attribute__((packed)) elf_section_header_t;
+
+// ELF 格式符号
+typedef
+struct elf_symbol_t {
+	dword name;
+	dword value;
+	dword size;
+	byte  info;
+	byte  other;
+	word shndx;
+} __attribute__((packed)) elf_symbol_t;
+
+// ELF 信息
+typedef
+struct elf_t {
+	elf_symbol_t *symtab;
+	dword	  symtabsz;
+	const char   *strtab;
+	dword	  strtabsz;
+} elf_t;

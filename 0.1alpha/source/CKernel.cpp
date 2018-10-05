@@ -1,11 +1,13 @@
 #include "CKernel.h"
-#include "real_console.h"
-#include "debug.h"
+#include "CErrorReporter.h"
+#include "io.h"
+using namespace io;
 
 CKernel::CKernel(multiboot_t *mb):
 	memory(mb)
 {
 	this->mb = mb;
+	CErrorReporter::init(mb);
 }
 
 CKernel::~CKernel()
@@ -15,8 +17,9 @@ CKernel::~CKernel()
 
 void CKernel::run()
 {
-	debug::init_debug(mb);
-	real_console::print_color(real_console::color::green, real_console::color::red, "Hello World!\n");
+	
+	console::real::print_color(console::real::color::green, \
+		console::real::color::red, "Hello World!\n");
 	// int sum = 0;
 	// int i = '0' - 1;
 		
@@ -28,5 +31,5 @@ void CKernel::run()
 		// sum++;
 		// sum %= 1280;
 	// }
-	debug::panic("Test!");
+	CErrorReporter::panic("Test!");
 }
