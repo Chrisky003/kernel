@@ -1,6 +1,4 @@
 # kernel
-Learn to make a kernel!
-
 
 版本后缀说明：
   alpha：正在编码；
