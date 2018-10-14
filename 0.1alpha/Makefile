@@ -1,10 +1,10 @@
 MAJOR_VERSION_NUMBER = 0
 MINOR_VERSION_NUMBER = 1
 VERSION = alpha
-NAME = kernel-$(MAJOR_VERSION_NUMBER).$(MINOR_VERSION_NUMBER)-$(VERSION)
+MODULE_NAME = kernel
+NAME = module-$(MODULE_NAME)-$(MAJOR_VERSION_NUMBER).$(MINOR_VERSION_NUMBER)-$(VERSION)
 PROJECT = ..
-WORKING = $(PROJECT)/$(MAJOR_VERSION_NUMBER).$(MINOR_VERSION_NUMBER)$(VERSION)
-SOURCEPATH = $(WORKING)/source
+WORKING = .
 BUILDPATH = $(PROJECT)/build
 
 ASM = nasm
@@ -12,8 +12,9 @@ CC = gcc
 CPP = g++
 LD = ld
 MAKE = make
+LDSCRIPTS = 
 
-SOURCES = $(SOURCEPATH)/entry.s $(filter-out $(SOURCEPATH)/entry.s, $(patsubst %.o,, $(wildcard $(SOURCEPATH)/*.*)))
+SOURCES = $(SOURCEPATH)/entry.s $(filter-out $(SOURCEPATH)/entry.s, $(wildcard *s) $(wildcard *c) $(wildcard *cpp))
 OBJECTS = $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(patsubst %.s, %.o, $(SOURCES))))
 
 #无调试:
@@ -30,17 +31,11 @@ ASM_FLAGS = -f elf -g -F stabs
 all: 
 	@$(MAKE) build
 	
-build/kernel: $(OBJECTS)
-#	@$(MAKE) clean_build
+.PHONY: build
+build: $(OBJECTS)
 	@echo LD  $(subst $(WORKING)/,, $(BUILDPATH)/$(NAME))
 	@$(LD) $(LD_FLAGS) $(OBJECTS) -o $(BUILDPATH)/$(NAME)
-#	@$(MAKE) clean
 	
-.PHONY: build
-build:
-#	@rm -rf $(SOURCEPATH)/*.o
-	@$(MAKE) build/kernel
-
 %.o: %.cpp FORCE
 	@echo CPP  $(subst $(WORKING)/,, $<)
 	@$(CPP) $(C_FLAGS) $< -o $@
@@ -83,11 +78,7 @@ debug:build/kernel
 .PHONY: clean
 clean:
 	@echo RM   $(subst $(WORKING)/,, $(SOURCEPATH)/*.o)
-	@rm -rf $(SOURCEPATH)/*.o
-	@echo 清理完成!
-
-.PHONY:clean_build
-clean_build:
+	@rm -rf *.o
 	@echo RM   $(NAME)
 	@rm -rf $(BUILDPATH)/$(NAME)
 	@echo 清理完成!
