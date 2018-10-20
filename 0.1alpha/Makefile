@@ -55,6 +55,10 @@ build: $(SUBDIRS) $(OBJECTS)
 	@echo CC  $(subst $(WORKING)/,, $<)
 	@$(CC) $(C_FLAGS) $< -o $@
 
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	$(MAKE) $(TARGETS) -C $@\
+
 # .PHONY: copy
 # copy:
 # 	@$(MAKE) mount
