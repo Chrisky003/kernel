@@ -1,10 +1,8 @@
 #include "def.h"
 #include "CKernel.h"
 
-void* _Unwind_Resume = nullptr;
-void* __gxx_personality_v0 = nullptr;
-
-extern "C" int entry(multiboot_t *mb);
+// void* _Unwind_Resume = nullptr;
+// void* __gxx_personality_v0 = nullptr;
 
 extern "C" int entry(multiboot_t *mb)
 {

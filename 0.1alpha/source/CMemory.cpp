@@ -51,7 +51,7 @@ extern "C" void gdt_flush(int addr)
 	asm("	mov    %eax,%gs\n");
 	asm("	mov    %eax,%ss\n");
 	asm("	jmp    gdt_flush.flush\n");
-	asm("gdt_flush.flush:");
+	asm("gdt_flush.flush:\n");
 	asm("	ret\n");
 }
 
