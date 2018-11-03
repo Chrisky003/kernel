@@ -2,21 +2,18 @@
 #include "io.h"
 using namespace io;
 
-CMemory::CMemory(multiboot_t *mb)
-{
+CMemory::CMemory(multiboot_t *mb) {
 	this->mb = mb;
 }
 
-CMemory::~CMemory()
-{
+CMemory::~CMemory() {
 
 }
 
 // 全局描述符表构造函数，根据下标构造
 // 参数分别是 数组下标、基地址、限长、访问标志，其它访问标志
 /* 结构体定义如下：
-typedef struct
-{
+typedef struct {
 	uint16_t limit_low;	 // 段界限   15～0
 	uint16_t base_low;	  // 段基地址 15～0
 	uint8_t  base_middle;   // 段基地址 23～16
@@ -25,8 +22,7 @@ typedef struct
 	uint8_t  base_high;	 // 段基地址 31～24
 } __attribute__((packed)) gdt_entry_t;
 */
-void CMemory::gdt_set_gate(int num, dword base, dword limit, byte access, byte gran)
-{
+void CMemory::gdt_set_gate(int num, dword base, dword limit, byte access, byte gran) {
 	gdt_entries[num].base_low	 = (base & 0xFFFF);
 	gdt_entries[num].base_middle  = (base >> 16) & 0xFF;
 	gdt_entries[num].base_high	= (base >> 24) & 0xFF;
@@ -40,8 +36,7 @@ void CMemory::gdt_set_gate(int num, dword base, dword limit, byte access, byte g
 
 // 声明内核栈地址
 extern dword stack;
-extern "C" void gdt_flush(int addr)
-{
+extern "C" void gdt_flush(int addr) {
 	asm("	mov    0x4(%esp),%eax\n");
 	asm("	lgdtl  (%eax)\n");
 	asm("	mov    $0x10,%ax\n");
@@ -56,8 +51,7 @@ extern "C" void gdt_flush(int addr)
 }
 
 // 初始化全局描述符表
-void CMemory::init_gdt()
-{
+void CMemory::init_gdt() {
 	// 全局描述符表界限 e.g. 从 0 开始，所以总长要 - 1
 	gdt_ptr.limit = sizeof(gdt_entry_t) * GDT_LENGTH - 1;
 	gdt_ptr.base = (dword)&gdt_entries;	
