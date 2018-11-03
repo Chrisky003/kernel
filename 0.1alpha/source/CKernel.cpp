@@ -4,19 +4,16 @@
 using namespace io;
 
 CKernel::CKernel(multiboot_t *mb):
-	memory(mb)
-{
+	memory(mb) {
 	this->mb = mb;
 	CErrorReporter::init(mb);
 }
 
-CKernel::~CKernel()
-{
+CKernel::~CKernel() {
 	
 }
 
-void CKernel::run()
-{
+void CKernel::run() {
 	
 	console::real::print_color(console::real::color::green, \
 		console::real::color::red, "Hello World!\n");
