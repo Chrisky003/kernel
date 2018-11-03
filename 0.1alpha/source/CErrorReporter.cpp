@@ -4,17 +4,13 @@ using namespace io;
 
 elf_t CErrorReporter::kernel_elf;
 
-int CErrorReporter::ELF32_ST_TYPE(int i)
-{
+int CErrorReporter::ELF32_ST_TYPE(int i) {
 	return i & 0xf;
 }
 
-void CErrorReporter::assert(int x, char* info)   
-{
-	do 
-	{
-		if (!(x)) 
-		{
+void CErrorReporter::assert(int x, char* info) {
+	do {
+		if (!(x)) {
 			panic(info);
 		}
 	} while (0);
@@ -22,8 +18,7 @@ void CErrorReporter::assert(int x, char* info)
 }
 
 // 从 multiboot_t 结构获取ELF信息
-elf_t CErrorReporter::elf_from_multiboot(multiboot_t *mb)
-{
+elf_t CErrorReporter::elf_from_multiboot(multiboot_t *mb) {
 	int i;
 	elf_t elf;
 	elf_section_header_t *sh = (elf_section_header_t *)mb->addr;
@@ -46,8 +41,7 @@ elf_t CErrorReporter::elf_from_multiboot(multiboot_t *mb)
 }
 
 // 查看ELF的符号信息
-const char *CErrorReporter::elf_lookup_symbol(dword addr, elf_t *elf)
-{
+const char *CErrorReporter::elf_lookup_symbol(dword addr, elf_t *elf) {
 	int i;
 
 	for (i = 0; i < (elf->symtabsz / sizeof(elf_symbol_t)); i++) {
@@ -63,14 +57,12 @@ const char *CErrorReporter::elf_lookup_symbol(dword addr, elf_t *elf)
 	return NULL;
 }
 
-void CErrorReporter::init(multiboot_t *mb)
-{
+void CErrorReporter::init(multiboot_t *mb) {
 	// 从 GRUB 提供的信息中获取到内核符号表和代码地址信息
 	kernel_elf = elf_from_multiboot(mb);
 }
 
-void CErrorReporter::print_cur_status()
-{
+void CErrorReporter::print_cur_status() {
 	static int round = 0;
 	word reg1, reg2, reg3, reg4;
 
@@ -89,23 +81,20 @@ void CErrorReporter::print_cur_status()
 	++round;
 }
 
-void CErrorReporter::panic(const char *msg)
-{
+void CErrorReporter::panic(const char *msg) {
 	console::real::print("*** System panic: %s\n", msg);
 	print_stack_trace();
 	console::real::print("***\n");
 
-// 致命错误发生后打印栈信息后停止在这里
-while(1);
+	// 致命错误发生后打印栈信息后停止在这里
+	while(1);
 }
 
-void CErrorReporter::print_stack_trace()
-{
+void CErrorReporter::print_stack_trace() {
 	dword *ebp, *eip;
 
 	asm volatile ("mov %%ebp, %0" : "=r" (ebp));
-	while (ebp)
-	{
+	while (ebp) {
 		eip = ebp + 1;
 		console::real::print("   [0x%x] %s\n", *eip, \
 			elf_lookup_symbol(*eip, &kernel_elf));
