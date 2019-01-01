@@ -1,0 +1,6 @@
+grub2 magic解决方案:
+    ld链接脚本中添加.magic段，用
+    int magic __attribute__((section(".magic"))) =
+    0x1BADB002;
+
+
