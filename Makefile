@@ -36,23 +36,22 @@ build: $(OBJECTS)
 	@$(CC) $(C_FLAGS) $< -o $@
 
 DEVICE:=
-.PHONY:debug
-debug:DEVICE=$(shell sudo losetup -Pf --show ~/Desktop/floppy.img)
-debug:build
+.PHONY: update
+update:DEVICE=$(shell sudo losetup -Pf --show ~/Desktop/floppy.img)
+update:
 	@sudo mount $(DEVICE)p1 /mnt
 	@sudo cp kernel /mnt/
 	@sudo umount /mnt
 	@sudo losetup -d $(DEVICE)
-	@$(MAKE) debug_run
 
-.PHONY: debug_run
-debug_run:
+.PHONY:debug
+debug: update
 	@qemu-system-i386 -S -s -hda ~/Desktop/floppy.img &
 	@sleep 1
 	@gdb -tui -x script/gdbinit
 
 .PHONY: run
-run:
+run: update
 	@qemu-system-i386 -hda ~/Desktop/floppy.img
 
 .PHONY: clean

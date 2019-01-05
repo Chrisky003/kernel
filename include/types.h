@@ -18,6 +18,19 @@ typedef signed		short	int16;
 typedef	unsigned	char	uint8;
 typedef	signed		char	int8;
 
+class POINT {
+public:
+	int x;
+	int y;
+	POINT() {
+		this->x = this->y = 0;
+	}
+	POINT(int x, int y) {
+		this->x = x;
+		this->y = y;
+	}
+};
+
 typedef struct multiboot
 {
 	int flags;
