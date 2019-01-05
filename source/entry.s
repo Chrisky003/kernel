@@ -12,6 +12,7 @@ MBOOT_CHECKSUM 		equ 	-(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 dd MBOOT_HEADER_MAGIC 	; GRUB 会通过这个魔数判断该映像是否支持
 dd MBOOT_HEADER_FLAGS   ; GRUB 的一些加载时选项，其详细注释在定义处
 dd MBOOT_CHECKSUM	   ; 检测数值，其含义在定义处
+resb 36
 
 [SECTION .text] 	; 代码段从这里开始
 
