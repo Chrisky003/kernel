@@ -29,14 +29,14 @@ ENTRY(start)
 SECTIONS
 {
 	. = 0x100000;
-	
-	.magic :
+	.multiboot :
 	{
-		*(.magic)
+		*(.multiboot)
 		. = ALIGN(4096);
 	}
 	.text :
 	{
+		
 		*(.text)
 		. = ALIGN(4096);
 	}

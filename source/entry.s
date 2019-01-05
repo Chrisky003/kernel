@@ -8,7 +8,7 @@ MBOOT_CHECKSUM 		equ 	-(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 
 [BITS 32]  	; 所有代码以 32-bit 的方式编译
 
-[SECTION .magic]
+[SECTION .multiboot]
 dd MBOOT_HEADER_MAGIC 	; GRUB 会通过这个魔数判断该映像是否支持
 dd MBOOT_HEADER_FLAGS   ; GRUB 的一些加载时选项，其详细注释在定义处
 dd MBOOT_CHECKSUM	   ; 检测数值，其含义在定义处
@@ -17,7 +17,7 @@ dd MBOOT_CHECKSUM	   ; 检测数值，其含义在定义处
 
 [GLOBAL start] 		; 内核代码入口，此处提供该声明给 ld 链接器
 [GLOBAL glb_mboot_ptr] 	; 全局的 struct multiboot * 变量
-[EXTERN _entry] 	; 声明内核 C 代码的入口函数
+[EXTERN kernelEntry] 	; 声明内核 C 代码的入口函数
 
 start:
 	cli  			 ; 此时还没有设置好保护模式的中断处理

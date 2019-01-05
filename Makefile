@@ -3,14 +3,14 @@ CC=gcc
 CPP=g++
 LD=ld
 MAKE=make
-LDSCRIPTS=/scripts/kernel.ld
+LDSCRIPTS=script/kernel.ld
 
-SOURCES=$(wildcard *.s *.c *.cpp)
+SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
 OBJECTS=$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(patsubst %.s, %.o, $(SOURCES))))
 
-C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector -I include/
+C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector -fno-pic -I include/
 
-LD_FLAGS = $(if $(LDSCRIPTS)!=,-T $(LDSCRIPTS)) -m i386pe -nostdlib
+LD_FLAGS = $(if $(LDSCRIPTS)!=,-T $(LDSCRIPTS)) -m elf_i386 -nostdlib
 
 ASM_FLAGS = -f elf -g -F stabs
 
@@ -20,54 +20,41 @@ all:
 
 .PHONY: build
 build: $(OBJECTS)
-	@echo LD  $(subst $(WORKING)/,, $(BUILDPATH)/$(NAME))
+	@echo LD  kernel
 	@$(LD) $(LD_FLAGS) $(OBJECTS) -o kernel
 
 %.o: %.cpp
 	@echo CPP  $<
-	@$(CPP) $(C_FLAGS) $< -o obj/$@
+	@$(CPP) $(C_FLAGS) $< -o $@
 
 %.o: %.s
 	@echo AS  $<
-	@$(ASM) $(ASM_FLAGS) $< -o obj/$@
+	@$(ASM) $(ASM_FLAGS) $< -o $@
 
 %.o: %.c
 	@echo CC  $<
-	@$(CC) $(C_FLAGS) $< -o obj/$@
+	@$(CC) $(C_FLAGS) $< -o $@
 
-# .PHONY: copy
-# copy:
-# 	@$(MAKE) mount
-# 	@sudo cp $(BUILDPATH)/$(NAME) /mnt/boot/kernel
-# 	@sleep 1
-# 	@$(MAKE) umount
+DEVICE:=
+.PHONY:debug
+debug:DEVICE=$(shell sudo losetup -Pf --show ~/Desktop/floppy.img)
+debug:build
+	@sudo mount $(DEVICE)p1 /mnt
+	@sudo cp kernel /mnt/
+	@sudo umount /mnt
+	@sudo losetup -d $(DEVICE)
+	@$(MAKE) debug_run
 
-# .PHONY: mount
-# mount:
-# 	@sudo mount /dev/sdb1 /mnt
-
-# .PHONY: umount
-# umount:
-# 	@sudo umount /mnt
-
-# .PHONY: run
-# run: build/kernel
-# 	@$(MAKE) copy
-# 	@sudo qemu-system-i386 -hda /dev/sdb
-
-# .PHONY:debug
-# debug:build/kernel
-# 	@qemu-system-i386 -S -s -hda /dev/sdb &
-# 	@sleep 1
-# 	@gdb -tui -x scripts/gdbinit
-
-obj:
-	mkdir obj
+.PHONY: debug_run
+debug_run:
+	@qemu-system-i386 -S -s -hda ~/Desktop/floppy.img &
+	@sleep 1
+	@gdb -tui -x script/gdbinit
 
 .PHONY: clean
 clean:
-	@echo RM   obj/*
-	@rm -rf obj/
+	@echo RM   *.o
+	@rm -rf source/*.o
 	@echo RM   kernel
 	@rm -rf kernel
 	@echo 清理完成!
@@ -77,4 +64,9 @@ FORCE:
 
 # Declare the contents of the .PHONY variable as phony.  We keep that
 # information in a variable so we can use it in if_changed and friends.
-.PHONY: $(PHONY)
+.PHONY: $(PHONY)
+
+ECHO:=
+.PHONY: ECHO
+ECHO:
+	@echo $(ECHO)

@@ -18,7 +18,7 @@ typedef signed		short	int16;
 typedef	unsigned	char	uint8;
 typedef	signed		char	int8;
 
-typedef struct multiboot_t
+typedef struct multiboot
 {
 	int flags;
 	// Multiboot 的版本信息
