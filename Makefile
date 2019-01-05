@@ -51,6 +51,10 @@ debug_run:
 	@sleep 1
 	@gdb -tui -x script/gdbinit
 
+.PHONY: run
+run:
+	@qemu-system-i386 -hda ~/Desktop/floppy.img
+
 .PHONY: clean
 clean:
 	@echo RM   *.o
