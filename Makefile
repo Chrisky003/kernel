@@ -23,6 +23,9 @@ build: $(OBJECTS)
 	@echo LD  kernel
 	@$(LD) $(LD_FLAGS) $(OBJECTS) -o kernel
 
+kernel: $(OBJECTS)
+	@$(MAKE) build
+
 %.o: %.cpp
 	@echo CPP  $<
 	@$(CPP) $(C_FLAGS) $< -o $@
@@ -45,13 +48,15 @@ update:
 	@sudo losetup -d $(DEVICE)
 
 .PHONY:debug
-debug: update
+debug: kernel
+	@$(MAKE) update
 	@qemu-system-i386 -S -s -hda ~/Desktop/floppy.img &
 	@sleep 1
 	@gdb -tui -x script/gdbinit
 
 .PHONY: run
-run: update
+run: kernel
+	@$(MAKE) update
 	@qemu-system-i386 -hda ~/Desktop/floppy.img
 
 .PHONY: clean
