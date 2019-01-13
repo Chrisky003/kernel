@@ -35,6 +35,8 @@ namespace io {
                 color fore = color::white);
             void puts(char str[], color back = color::black, \
                 color fore = color::white);
+            void printk(const char *format, ...);
+            void printk_color(color back, color fore, const char *format, ...);
         }
         namespace real_console = real;
     }

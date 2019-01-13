@@ -38,14 +38,14 @@ kernel: $(OBJECTS)
 	@echo CC  $<
 	@$(CC) $(C_FLAGS) $< -o $@
 
-DEVICE:=
-.PHONY: update
-update:DEVICE=$(shell sudo losetup -Pf --show ~/Desktop/floppy.img)
-update:
-	@sudo mount $(DEVICE)p1 /mnt
-	@sudo cp kernel /mnt/
-	@sudo umount /mnt
-	@sudo losetup -d $(DEVICE)
+# DEVICE:=
+# .PHONY: update
+# update:DEVICE:=$(shell sudo losetup -Pf --show ~/Desktop/floppy.img)
+# update:
+# 	@sudo mount $(DEVICE)p1 /mnt
+# 	@sudo cp kernel /mnt/
+# 	@sudo umount /mnt
+# 	@sudo losetup -d $(DEVICE)
 
 .PHONY:debug
 debug: kernel
@@ -78,3 +78,12 @@ ECHO:=
 .PHONY: ECHO
 ECHO:
 	@echo $(ECHO)
+
+TEST:=
+ifeq (,)
+TEST:=$(shell echo $$@ >> test!)
+endif
+.PHONY: test
+test:
+	echo $(TEST)
+	echo $@
