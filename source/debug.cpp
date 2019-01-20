@@ -5,17 +5,17 @@
 using namespace lib::elf;
 using namespace io::console::real;
 
-extern MULTIBOOT *glb_mboot_ptr;
+// extern MULTIBOOT *glb_mboot_ptr;
 
 namespace debug {
     void print_stack_trace();
 
     ELF kernel_elf;
 
-    void init_debug()
+    void init_debug(MULTIBOOT *mb)
     {
         // 从 GRUB 提供的信息中获取到内核符号表和代码地址信息
-        kernel_elf = lib::elf::elf_from_multiboot(::glb_mboot_ptr);
+        kernel_elf = ::lib::elf::elf_from_multiboot(mb);
     }
 
     void print_cur_status()
@@ -55,7 +55,7 @@ namespace debug {
         asm volatile ("mov %%ebp, %0" : "=r" (ebp));
         while (ebp) {
             eip = ebp + 1;
-            printk("   [0x%x] %s\n", *eip, lib::elf::elf_lookup_symbol(*eip, &kernel_elf));
+            printk("   [0x%x] %s\n", *eip, ::lib::elf::elf_lookup_symbol(*eip, &kernel_elf));
             ebp = (uint32*)*ebp;
         }
     }
