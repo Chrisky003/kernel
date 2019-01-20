@@ -49,14 +49,14 @@ kernel: $(OBJECTS)
 
 .PHONY:debug
 debug: kernel
-	@$(MAKE) update
+	# @$(MAKE) update
 	@qemu-system-i386 -S -s -hda ~/Desktop/floppy.img &
 	@sleep 1
 	@gdb -tui -x script/gdbinit
 
 .PHONY: run
 run: kernel
-	@$(MAKE) update
+	# @$(MAKE) update
 	@qemu-system-i386 -hda ~/Desktop/floppy.img
 
 .PHONY: clean
@@ -78,12 +78,3 @@ ECHO:=
 .PHONY: ECHO
 ECHO:
 	@echo $(ECHO)
-
-TEST:=
-ifeq (,)
-TEST:=$(shell echo $$@ >> test!)
-endif
-.PHONY: test
-test:
-	echo $(TEST)
-	echo $@
