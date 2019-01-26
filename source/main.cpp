@@ -2,6 +2,8 @@
 #include "io.h"
 #include "debug.h"
 #include "memManage.h"
+#include "CModule.h"
+#include "string.h"
 using namespace io::console::real_console;
 using namespace debug;
 
