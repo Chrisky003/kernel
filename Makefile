@@ -1,18 +1,19 @@
-ASM=nasm
-CC=gcc
-CPP=g++
-LD=ld
-MAKE=make
-LDSCRIPTS=script/kernel.ld
+ASM:=nasm
+CC:=gcc
+CPP:=g++
+LD:=ld
+MAKE:=make
+LDSCRIPTS:=script/kernel.ld
 
-SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
-OBJECTS=$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(patsubst %.s, %.o, $(SOURCES))))
+SOURCES:=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
+#OBJECTS:=$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(patsubst %.s, %.o, $(SOURCES))))
+OBJECTS:=$(foreach i,$(SOURCES),$(i).o)
 
-C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector -fno-pic -I include/
+C_FLAGS:=-c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector -fno-pic -I include/
 
-LD_FLAGS = $(if $(LDSCRIPTS)!=,-T $(LDSCRIPTS)) -m elf_i386 -nostdlib
+LD_FLAGS:=$(if $(LDSCRIPTS)!=,-T $(LDSCRIPTS)) -m elf_i386 -nostdlib
 
-ASM_FLAGS = -f elf -g -F stabs
+ASM_FLAGS:=-f elf -g -F stabs
 
 .PNONY: all
 all:
