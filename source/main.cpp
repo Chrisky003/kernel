@@ -18,7 +18,7 @@ extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {
 	memManage::init_mm();
 	clear();
 	puts("Hello World!\n", color::green, color::red);
-	printk("%h\n", pmultiboot);
+	printk("0x%x\n", pmultiboot);
 	panic("Test!");
 	return 0;
 }

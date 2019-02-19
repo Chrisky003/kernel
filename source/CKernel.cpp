@@ -9,5 +9,5 @@ CKernel::~CKernel() {
 }
 
 bool CKernel::init() {
-
+    return true;
 }
