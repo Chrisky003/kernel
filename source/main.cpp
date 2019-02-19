@@ -7,6 +7,10 @@
 using namespace io::console::real_console;
 using namespace debug;
 
+extern "C" {
+	void *__dso_handle = 0;
+}
+
 extern "C" int kernelEntry(MULTIBOOT *pmultiboot);
 
 extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {

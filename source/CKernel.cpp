@@ -8,6 +8,6 @@ CKernel::~CKernel() {
 
 }
 
-bool init() {
+bool CKernel::init() {
 
 }
