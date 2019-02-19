@@ -4,15 +4,19 @@ CPP=g++
 LD=ld
 MAKE=make
 LDSCRIPTS=script/kernel.ld
+empty:=
+space:=$(empty) $(empty)
 
 SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
+# SOURCE:=$(wildcard */)
 OBJECTS=$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(patsubst %.s, %.o, $(SOURCES))))
 
-C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector -fno-pic -I include/
+C_FLAGS = -c -Wall -m32 -ggdb -gdwarf-2 -fno-stack-protector -I include/
 
-LD_FLAGS = $(if $(LDSCRIPTS)!=,-T $(LDSCRIPTS)) -m elf_i386 -nostdlib
+#-nostdinc -fno-builtin -fno-pic 
+LD_FLAGS = $(if $(LDSCRIPTS)!=,-T $(LDSCRIPTS)) -m elf_i386 /usr/lib/i386-linux-gnu/libstdc++.so.6 /lib/i386-linux-gnu/libc.so.6 /lib/i386-linux-gnu/libgcc_s.so.1 -L/usr/lib/i386-linux-gnu -L/lib/i386-linux-gnu -nostdlib -N
 
-ASM_FLAGS = -f elf -g -F stabs
+ASM_FLAGS = -f elf -g -F dwarf
 
 .PNONY: all
 all:
@@ -74,7 +78,7 @@ FORCE:
 # information in a variable so we can use it in if_changed and friends.
 .PHONY: $(PHONY)
 
-ECHO:=
+ECHO:=$(shell ls -p | grep / | grep "$(subst $(space),\|,docs/ script/ include/ reference/)" -v -w)
 .PHONY: ECHO
 ECHO:
-	@echo $(ECHO)
+	echo $(ECHO)

@@ -13,6 +13,26 @@ namespace memManage {
 
     // 声明内核栈地址
     extern uint32 stack;
+<<<<<<< HEAD
+=======
+    extern "C" void gdt_flush(GDT_PTR *pgdt);
+    // extern "C" void gdt_flush(GDT_PTR *pgdt) {
+    //     asm("mov    0x4(%esp),%eax\n\t");
+    //     asm(".intel_syntax\n\t");
+    //     asm("lgdt [%eax]\n\t");
+
+    //     asm("jmp .flush\n\t");
+
+    //     asm(".flush:\n\t");
+    //     asm("mov %ax, 0x10\n\t");
+    //     asm("mov %ds, %ax\n\t");
+    //     asm("mov %es, %ax\n\t");
+    //     asm("mov %fs, %ax\n\t");
+    //     asm("mov %gs, %ax\n\t");
+    //     asm("mov %ss, %ax\n\t");
+    //     asm(".att_syntax\n\t");
+    // }
+>>>>>>> Reconstruct_using_module
 
     extern "C" void gdt_flush(GDT_PTR *pgdt);
     // 初始化全局描述符表

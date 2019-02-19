@@ -61,7 +61,7 @@ SECTIONS
 		*(.stabstr)
 	 	. = ALIGN(4096);
 	}
-	
 	/DISCARD/ : { *(.comment) *(.eh_frame) }
 }
+/*INCLUDE script/std.ld*/
 
