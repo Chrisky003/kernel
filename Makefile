@@ -32,17 +32,17 @@ build: $(OBJECTS)
 kernel: $(OBJECTS)
 	@$(MAKE) build
 
-%.o: %.cpp
+%.cpp.o: %.cpp
 	@echo CPP  $<
 	@$(CPP) $(C_FLAGS) $< -o $@
 
-%.o: %.s
+%.s.o: $(basename %).s
 	@echo AS  $<
 	@$(ASM) $(ASM_FLAGS) $< -o $@
 
-%.o: %.c
-	@echo CC  $<
-	@$(CC) $(C_FLAGS) $< -o $@
+#%.o: %.c
+#	@echo CC  $<
+#	@$(CC) $(C_FLAGS) $< -o $@
 
 # DEVICE:=
 # .PHONY: update
