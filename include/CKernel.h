@@ -10,4 +10,6 @@ public:
     virtual bool init();
 public:
     CModManager mods;
-}kernel;
+};
+
+extern CKernel kernel;

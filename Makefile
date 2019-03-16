@@ -1,7 +1,8 @@
 ASM=nasm
-CC=gcc
-CPP=g++
-LD=ld
+CROSS:=i686-linux-gnu
+CC=$(CROSS)-gcc
+CPP=$(CROSS)-g++
+LD=$(CROSS)-ld
 MAKE=make
 LDSCRIPTS=script/kernel.ld
 empty:=
@@ -11,12 +12,11 @@ SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
 # SOURCE:=$(wildcard */)
 OBJECTS:=$(foreach i,$(SOURCES),$(i).o)
 
-C_FLAGS:=-c -Wall -m32 -ggdb -gdwarf-2 -fno-stack-protector -I include/
+C_FLAGS:=-c -Wall -m32 -ggdb -gdwarf-2 -fno-stack-protector -I include/ -nostdlib --static
 
 #-nostdinc -fno-builtin -fno-pic 
-LD_FLAGS = $(if $(LDSCRIPTS)!=,-T $(LDSCRIPTS)) -m elf_i386 /usr/lib/i386-linux-gnu/libstdc++.so.6 \
-	/lib/i386-linux-gnu/libc.so.6 /lib/i386-linux-gnu/libgcc_s.so.1 -L/usr/lib/i386-linux-gnu \
-	-L/lib/i386-linux-gnu -nostdlib -N
+LD_FLAGS = $(if $(LDSCRIPTS)!=,-T$(LDSCRIPTS)) 
+#-m elf_i386
 	
 ASM_FLAGS:=-f elf -g -F dwarf
 
@@ -27,7 +27,7 @@ all:
 .PHONY: build
 build: $(OBJECTS)
 	@echo LD  kernel
-	@$(LD) $(LD_FLAGS) $(OBJECTS) -o kernel
+	@$(CPP) $(OBJECTS) -T script/kernel.ld -o kernel -L ./lib -lc -lm -lgcc --static
 
 kernel: $(OBJECTS)
 	@$(MAKE) build
@@ -44,14 +44,17 @@ kernel: $(OBJECTS)
 #	@echo CC  $<
 #	@$(CC) $(C_FLAGS) $< -o $@
 
-# DEVICE:=
-# .PHONY: update
-# update:DEVICE:=$(shell sudo losetup -Pf --show ~/Desktop/floppy.img)
-# update:
-# 	@sudo mount $(DEVICE)p1 /mnt
-# 	@sudo cp kernel /mnt/
-# 	@sudo umount /mnt
-# 	@sudo losetup -d $(DEVICE)
+DEVICE:=
+.PHONY: update
+update:DEVICE:=$(shell sudo losetup -f)
+update:
+	@echo device: $(DEVICE)
+	@sudo losetup -P $(DEVICE) ~/Desktop/floppy.img
+	@sudo mount $(DEVICE)p1 /mnt
+	@sudo cp kernel /mnt/
+	@sleep 1
+	@sudo umount /mnt
+	@sudo losetup -d $(DEVICE)
 
 .PHONY:debug
 debug: kernel

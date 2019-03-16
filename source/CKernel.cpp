@@ -1,7 +1,9 @@
 #include "CKernel.h"
 
-CKernel::CKernel() {
-    mods.addMod(this);
+CKernel kernel;
+
+CKernel::CKernel(): CModule(0) {
+    
 }
 
 CKernel::~CKernel() {
