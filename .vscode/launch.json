@@ -4,7 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
@@ -13,26 +13,21 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [
-                {
-                    "name": "qemu",
-                    "value": "qemu-system-i386"
-                }
-            ],
+            "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            //"preLaunchTask": "Update",
+            "preLaunchTask": "predebug",
             "setupCommands": [
                 // {
                 //     "description": "Enable pretty-printing for gdb",
                 //     "text": "-enable-pretty-printing",
                 //     "ignoreFailures": true
                 // },
-                {
-                    "description": "启动qemu",
-                    "text": "shell qemu-system-i386 -S -s -hda ~/Desktop/floppy.img",
-                    "ignoreFailures": false
-                },
+                // {
+                //     "description": "启动qemu",
+                //     "text": "shell qemu-system-i386 -S -s -hda ~/Desktop/floppy.img & ",
+                //     "ignoreFailures": false
+                // },
                 {
                     "description": "连接至qemu",
                     "text": "target remote :1234",

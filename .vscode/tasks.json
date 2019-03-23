@@ -30,6 +30,12 @@
             "type": "shell",
             "command": "make run",
             "problemMatcher": []
+        },
+        {
+            "label": "debug",
+            "type": "shell",
+            "command": "make debug",
+            "problemMatcher": []
         }
     ]
 }

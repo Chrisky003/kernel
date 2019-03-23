@@ -58,7 +58,7 @@ update:
 
 .PHONY:debug
 debug: kernel
-	# @$(MAKE) update
+	@$(MAKE) update
 	@qemu-system-i386 -S -s -hda ~/Desktop/floppy.img &
 	@sleep 1
 	@gdb -tui -x script/gdbinit
