@@ -12,12 +12,12 @@ SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
 # SOURCE:=$(wildcard */)
 OBJECTS:=$(foreach i,$(SOURCES),$(i).o)
 
-C_FLAGS:=-c -Wall -m32 -ggdb -gdwarf-2 -fno-stack-protector -I include/ -nostdlib --static
+C_FLAGS:=-c -Wall -m32 -ggdb -gdwarf-2 -fno-stack-protector -I include/ -nostdlib -static -fno-use-linker-plugin
 
 #-nostdinc -fno-builtin -fno-pic 
-LD_FLAGS = $(if $(LDSCRIPTS)!=,-T$(LDSCRIPTS)) 
-#-m elf_i386
-	
+LD_FLAGS = -T script/kernel.ld -L ./lib -lc -lm -lgcc --static -fno-use-linker-plugin
+
+
 ASM_FLAGS:=-f elf -g -F dwarf
 
 .PNONY: all
@@ -27,7 +27,7 @@ all:
 .PHONY: build
 build: $(OBJECTS)
 	@echo LD  kernel
-	@$(CPP) $(OBJECTS) -T script/kernel.ld -o kernel -L ./lib -lc -lm -lgcc --static
+	@$(CPP) $(OBJECTS) -T script/kernel.ld -o kernel -L ./lib -lc -lm -lgcc --static -fno-use-linker-plugin
 
 kernel: $(OBJECTS)
 	@$(MAKE) build

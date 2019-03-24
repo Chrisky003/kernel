@@ -1,0 +1,40 @@
+ i686-linux-gnu-g++ main.cpp -o main -static -v -fno-use-linker-plugin
+sing built-in specs.
+COLLECT_GCC=i686-linux-gnu-g++
+COLLECT_LTO_WRAPPER=/usr/lib/gcc-cross/i686-linux-gnu/7/lto-wrapper
+Target: i686-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 7.3.0-16ubuntu3' --with-bugurl=file:///usr/share/doc/gcc-7/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --with-as=/usr/bin/i686-linux-gnu-as --with-ld=/usr/bin/i686-linux-gnu-ld --program-suffix=-7 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-targets=all --enable-multiarch --disable-werror --with-arch-32=i686 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=i686-linux-gnu --program-prefix=i686-linux-gnu- --includedir=/usr/i686-linux-gnu/include
+Thread model: posix
+gcc version 7.3.0 (Ubuntu 7.3.0-16ubuntu3)
+COLLECT_GCC_OPTIONS='-o' 'main' '-static' '-v' '-fno-use-linker-plugin' '-mtune=generic' '-march=i686'
+ /usr/lib/gcc-cross/i686-linux-gnu/7/cc1plus -quiet -v -imultiarch i386-linux-gnu -D_GNU_SOURCE main.cpp -quiet -dumpbase main.cpp -mtune=generic -march=i686 -auxbase main -version -fno-use-linker-plugin -fstack-protector-strong -Wformat -Wformat-security -o /tmp/ccF0Whqg.s
+GNU C++14 (Ubuntu 7.3.0-16ubuntu3) version 7.3.0 (i686-linux-gnu)
+        compiled by GNU C version 7.3.0, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version isl-0.19-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/local/include/i386-linux-gnu"
+ignoring nonexistent directory "/usr/include/i386-linux-gnu"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/include/c++/7
+ /usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/include/c++/7/i686-linux-gnu
+ /usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/include/c++/7/backward
+ /usr/lib/gcc-cross/i686-linux-gnu/7/include
+ /usr/lib/gcc-cross/i686-linux-gnu/7/include-fixed
+ /usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/include
+ /usr/include
+End of search list.
+GNU C++14 (Ubuntu 7.3.0-16ubuntu3) version 7.3.0 (i686-linux-gnu)
+        compiled by GNU C version 7.3.0, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version isl-0.19-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 6b54264141073109c49bc0ea8d9f7cc4
+COLLECT_GCC_OPTIONS='-o' 'main' '-static' '-v' '-fno-use-linker-plugin' '-mtune=generic' '-march=i686'
+ /usr/bin/i686-linux-gnu-as -v --32 -o /tmp/ccWLQ4JA.o /tmp/ccF0Whqg.s
+GNU assembler version 2.30 (i686-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.30
+COMPILER_PATH=/usr/lib/gcc-cross/i686-linux-gnu/7/:/usr/lib/gcc-cross/i686-linux-gnu/7/:/usr/lib/gcc-cross/i686-linux-gnu/:/usr/lib/gcc-cross/i686-linux-gnu/7/:/usr/lib/gcc-cross/i686-linux-gnu/:/usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/bin/
+LIBRARY_PATH=/usr/lib/gcc-cross/i686-linux-gnu/7/:/usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/lib/../lib/:/lib/../lib/:/usr/lib/i386-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/lib/:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-o' 'main' '-static' '-v' '-fno-use-linker-plugin' '-mtune=generic' '-march=i686'
+ /usr/lib/gcc-cross/i686-linux-gnu/7/collect2 --sysroot=/ --build-id -m elf_i386 --hash-style=gnu --as-needed -static -z relro -o main /usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/lib/../lib/crt1.o /usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/lib/../lib/crti.o /usr/lib/gcc-cross/i686-linux-gnu/7/crtbeginT.o -L/usr/lib/gcc-cross/i686-linux-gnu/7 -L/usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/lib/../lib -L/lib/../lib -L/usr/lib/i386-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/lib /tmp/ccWLQ4JA.o -lstdc++ -lm --start-group -lgcc -lgcc_eh -lc --end-group /usr/lib/gcc-cross/i686-linux-gnu/7/crtend.o /usr/lib/gcc-cross/i686-linux-gnu/7/../../../../i686-linux-gnu/lib/../lib/crtn.o
+COLLECT_GCC_OPTIONS='-o' 'main' '-static' '-v' '-fno-use-linker-plugin' '-mtune=generic' '-march=i686'
+
