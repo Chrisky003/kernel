@@ -27,7 +27,7 @@ all:
 .PHONY: build
 build: $(OBJECTS)
 	@echo LD  kernel
-	@$(CPP) $(OBJECTS) -T script/kernel.ld -o kernel -L ./lib -lc -lm -lgcc --static
+	@$(CPP) $(OBJECTS) -T script/kernel.ld -o kernel -static
 
 kernel: $(OBJECTS)
 	@$(MAKE) build

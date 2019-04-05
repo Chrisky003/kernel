@@ -35,3 +35,4 @@
 #自定义
 /obj
 /kernel
+!/lib/*
