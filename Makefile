@@ -12,12 +12,12 @@ SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
 # SOURCE:=$(wildcard */)
 OBJECTS:=$(foreach i,$(SOURCES),$(i).o)
 
-C_FLAGS:=-c -Wall -m32 -ggdb -gdwarf-2 -fno-stack-protector -I include/ -nostdlib --static
+C_FLAGS:=-c -Wall -m32 -ggdb -gdwarf-2 -fno-stack-protector -I include/ -nostdlib -static -fno-use-linker-plugin
 
 #-nostdinc -fno-builtin -fno-pic 
-LD_FLAGS = $(if $(LDSCRIPTS)!=,-T$(LDSCRIPTS)) 
-#-m elf_i386
-	
+LD_FLAGS = -T script/kernel.ld ./lib/crt1.o ./lib/crti.o ./lib/crtbeginT.o $(OBJECTS) ./lib/crtend.o ./lib/crtn.o -o kernel -L ./lib -lstdc++ -lm --start-group -lgcc -lgcc_eh -lc --end-group -static
+
+
 ASM_FLAGS:=-f elf -g -F dwarf
 
 .PNONY: all
@@ -27,7 +27,7 @@ all:
 .PHONY: build
 build: $(OBJECTS)
 	@echo LD  kernel
-	@$(CPP) $(OBJECTS) -T script/kernel.ld -o kernel -static
+	@$(LD) $(LD_FLAGS)
 
 kernel: $(OBJECTS)
 	@$(MAKE) build
@@ -70,7 +70,7 @@ run: kernel
 
 .PHONY: clean
 clean:
-	@echo RM   *.o
+	@echo RM   source/*.o
 	@rm -rf source/*.o
 	@echo RM   kernel
 	@rm -rf kernel
