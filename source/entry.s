@@ -14,13 +14,16 @@ dd MBOOT_HEADER_FLAGS   ; GRUB 的一些加载时选项，其详细注释在定�
 dd MBOOT_CHECKSUM	   ; 检测数值，其含义在定义处
 resb 36
 
+extern _Z41__static_initialization_and_destruction_0ii
+extern _start
+extern __do_global_ctors_aux
+extern __do_global_dtors_aux
+extern __CTOR_LIST__
 [SECTION .text] 	; 代码段从这里开始
 
 [GLOBAL start] 		; 内核代码入口，此处提供该声明给 ld 链接器
 [GLOBAL glb_mboot_ptr] 	; 全局的 struct multiboot * 变量
 [EXTERN kernelEntry] 	; 声明内核 C 代码的入口函数
-extern _Z41__static_initialization_and_destruction_0ii
-extern _start
 
 start:
 	cli  			 ; 此时还没有设置好保护模式的中断处理
@@ -30,13 +33,40 @@ start:
 	and esp, 0FFFFFFF0H	 ; 栈地址按照16字节对齐
 	mov [glb_mboot_ptr], ebx ; 将 ebx 中存储的指针存入全局变量
 	push esi
-	call _start
-	; push ebx
-	; call kernelEntry		 ; 调用内核入口函数
+	call cons
 
+
+	; push ebx
+	call kernelEntry		 ; 调用内核入口函数
+	; call __do_global_ctors_aux
 stop:
 	hlt
 	jmp stop
+
+cons:
+	mov    eax,__CTOR_LIST__
+	cmp    eax,0xffffffff
+	je     end
+	push   ebp
+	mov    ebp,esp
+	push   ebx
+	mov    ebx,__CTOR_LIST__
+	sub    esp,0x4
+	lea    esi,[esi+0x0]
+	lea    edi,[edi+0*1+0x0]
+.i:
+	sub    ebx,0x4
+	call   eax
+	mov    eax,[ebx]
+	cmp    eax,0xffffffff
+	jne    .i
+	add    esp,0x4
+	pop    ebx
+	pop    ebp
+	ret    
+	lea    esi,[esi+0x0]
+end:
+	repz ret 
 
 section .bss align=16				; 未初始化的数据段从这里开始
 stack:
