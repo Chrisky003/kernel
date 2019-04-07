@@ -36,3 +36,4 @@
 /obj
 /kernel
 !/lib
+/.vscode/ipch

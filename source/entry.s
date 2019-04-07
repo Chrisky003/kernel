@@ -19,6 +19,7 @@ extern _start
 extern __do_global_ctors_aux
 extern __do_global_dtors_aux
 extern __CTOR_LIST__
+extern _init
 [SECTION .text] 	; 代码段从这里开始
 
 [GLOBAL start] 		; 内核代码入口，此处提供该声明给 ld 链接器
@@ -33,40 +34,40 @@ start:
 	and esp, 0FFFFFFF0H	 ; 栈地址按照16字节对齐
 	mov [glb_mboot_ptr], ebx ; 将 ebx 中存储的指针存入全局变量
 	push esi
-	call cons
+	; call cons
 
 
 	; push ebx
-	call kernelEntry		 ; 调用内核入口函数
-	; call __do_global_ctors_aux
+	call _start
+	; call kernelEntry		 ; 调用内核入口函数
 stop:
 	hlt
 	jmp stop
 
-cons:
-	mov    eax,__CTOR_LIST__
-	cmp    eax,0xffffffff
-	je     end
-	push   ebp
-	mov    ebp,esp
-	push   ebx
-	mov    ebx,__CTOR_LIST__
-	sub    esp,0x4
-	lea    esi,[esi+0x0]
-	lea    edi,[edi+0*1+0x0]
-.i:
-	sub    ebx,0x4
-	call   eax
-	mov    eax,[ebx]
-	cmp    eax,0xffffffff
-	jne    .i
-	add    esp,0x4
-	pop    ebx
-	pop    ebp
-	ret    
-	lea    esi,[esi+0x0]
-end:
-	repz ret 
+; cons:
+; 	mov    eax,__CTOR_LIST__
+; 	cmp    eax,0xffffffff
+; 	je     end
+; 	push   ebp
+; 	mov    ebp,esp
+; 	push   ebx
+; 	mov    ebx,__CTOR_LIST__
+; 	sub    esp,0x4
+; 	lea    esi,[esi+0x0]
+; 	lea    edi,[edi+0*1+0x0]
+; .i:
+; 	sub    ebx,0x4
+; 	call   eax
+; 	mov    eax,[ebx]
+; 	cmp    eax,0xffffffff
+; 	jne    .i
+; 	add    esp,0x4
+; 	pop    ebx
+; 	pop    ebp
+; 	ret    
+; 	lea    esi,[esi+0x0]
+; end:
+; 	repz ret 
 
 section .bss align=16				; 未初始化的数据段从这里开始
 stack:
