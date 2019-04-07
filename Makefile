@@ -4,7 +4,6 @@ CC=$(CROSS)-gcc
 CPP=$(CROSS)-g++
 LD=$(CROSS)-ld
 MAKE=make
-LDSCRIPTS=script/kernel.ld
 empty:=
 space:=$(empty) $(empty)
 
@@ -36,7 +35,7 @@ kernel: $(OBJECTS)
 	@echo CPP  $<
 	@$(CPP) $(C_FLAGS) $< -o $@
 
-%.s.o: $(basename %).s
+%.s.o: %.s
 	@echo AS  $<
 	@$(ASM) $(ASM_FLAGS) $< -o $@
 
@@ -46,7 +45,7 @@ kernel: $(OBJECTS)
 
 DEVICE:=
 .PHONY: update
-update:DEVICE:=$(shell sudo losetup -f)
+update:DEVICE:=$(shell losetup -f)
 update:
 	@echo device: $(DEVICE)
 	@sudo losetup -P $(DEVICE) ~/Desktop/floppy.img
@@ -65,7 +64,7 @@ debug: kernel
 
 .PHONY: run
 run: kernel
-	# @$(MAKE) update
+	@$(MAKE) update
 	@qemu-system-i386 -hda ~/Desktop/floppy.img
 
 .PHONY: clean
@@ -83,7 +82,7 @@ FORCE:
 # information in a variable so we can use it in if_changed and friends.
 .PHONY: $(PHONY)
 
-ECHO:=$(shell ls -p | grep / | grep "$(subst $(space),\|,docs/ script/ include/ reference/)" -v -w)
+ECHO:=
 .PHONY: ECHO
 ECHO:
 	echo $(ECHO)
