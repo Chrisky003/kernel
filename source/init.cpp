@@ -16,23 +16,19 @@ extern "C" void _start(MULTIBOOT *pmultiboot) {
 }
 
 extern "C" void init() {
-    union {
-        void (*pf)();
-        int data;
-    } uni;
-    for (uni.pf = __KERNEL__CTOR__LIST__; uni.pf != __KERNEL__CTOR__END__; uni.data += 4) {
-        uni.pf();
+    void (**ps)(void);
+    ps = &__KERNEL__CTOR__LIST__;
+    for (int i = 0; ps[i] != __KERNEL__CTOR__END__; i++) {
+        ps[i]();
     }
     return;
 }
 
 extern "C" void fini() {
-    union {
-        void (*pf)();
-        int data;
-    } uni;
-    for (uni.pf = __KERNEL__DTOR__LIST__; uni.pf != __KERNEL__DTOR__END__; uni.data += 4) {
-        uni.pf();
+    void (**ps)(void);
+    ps = &__KERNEL__DTOR__LIST__;
+    for (int i = 0; ps[i] != __KERNEL__DTOR__END__; i++) {
+        ps[i]();
     }
     return;
 }
