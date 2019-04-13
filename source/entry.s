@@ -14,16 +14,14 @@ dd MBOOT_HEADER_FLAGS   ; GRUB 的一些加载时选项，其详细注释在定�
 dd MBOOT_CHECKSUM	   ; 检测数值，其含义在定义处
 resb 36
 
-extern _Z41__static_initialization_and_destruction_0ii
 extern _start
-extern __do_global_ctors_aux
-extern __do_global_dtors_aux
-extern __CTOR_LIST__
-extern _init
 [SECTION .text] 	; 代码段从这里开始
 
 [GLOBAL start] 		; 内核代码入口，此处提供该声明给 ld 链接器
-[GLOBAL glb_mboot_ptr] 	; 全局的 struct multiboot * 变量
+[GLOBAL glb_mboot_ptr] 	; 全局的 struct multiboot * 变量\
+global __cxa_pure_virtual
+global _ZdlPvm
+global stop
 [EXTERN kernelEntry] 	; 声明内核 C 代码的入口函数
 
 start:
@@ -33,7 +31,6 @@ start:
 	mov ebp, 0 		 ; 帧指针修改为 0
 	and esp, 0FFFFFFF0H	 ; 栈地址按照16字节对齐
 	mov [glb_mboot_ptr], ebx ; 将 ebx 中存储的指针存入全局变量
-	push esi
 	; call cons
 
 

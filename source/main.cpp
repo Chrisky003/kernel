@@ -17,6 +17,7 @@ extern "C" MULTIBOOT *glb_mboot_ptr;
 int main() {
 	return kernelEntry(glb_mboot_ptr);
 }
+
 class CTest {
 public:
 	CTest() {
@@ -25,7 +26,7 @@ public:
 	~CTest() {
 		puts("CTest Destructor.");
 	}
-}test;
+} test;
 
 extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {
 	init_debug(pmultiboot);

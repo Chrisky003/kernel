@@ -11,11 +11,11 @@ SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
 # SOURCE:=$(wildcard */)
 OBJECTS:=$(foreach i,$(SOURCES),$(i).o)
 
-C_FLAGS:=-c -Wall -m32 -ggdb -fno-stack-protector -I include/ -nostdlib -static -fno-use-linker-plugin
+C_FLAGS:=-c -Wall -m32 -ggdb -fno-stack-protector -I include/ -nostdlib -static -fno-use-linker-plugin -fno-rtti -fno-exceptions -fno-use-cxa-atexit
 
 #-nostdinc -fno-builtin -fno-pic 
 #LD_FLAGS = -T script/kernel.ld ./lib/crt1.o ./lib/crti.o ./lib/crtbeginT.o $(OBJECTS) ./lib/crtend.o ./lib/crtn.o -o kernel -L ./lib -lstdc++ -lm --start-group -lgcc -lgcc_eh -lc --end-group -static
-LD_FLAGS = -T script/kernel.ld $(OBJEECTS) -L ./lib --start-group -lgcc_eh --end-group -static
+LD_FLAGS = -T script/kernel.ld $(OBJECTS) -L ./lib
 
 ASM_FLAGS:=-f elf -g -F dwarf
 
