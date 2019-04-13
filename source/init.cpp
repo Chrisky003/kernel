@@ -18,19 +18,19 @@ extern "C" void _start(MULTIBOOT *pmultiboot) {
 }
 
 extern "C" void init() {
-    int **pf;
-    pf = (int**)&__KERNEL__CTOR__LIST__;
-    for (int i = 0; (int**)&pf[i] != (int**)&__KERNEL__CTOR__END__; i++) {
-        ((void(*)(void))&pf[i])();
+    void (**ps)(void);
+    ps = &__KERNEL__CTOR__LIST__;
+    for (int i = 0; ps[i] != __KERNEL__CTOR__END__; i++) {
+        ps[i]();
     }
     return;
 }
 
 extern "C" void fini() {
-    int **pf;
-    pf = (int**)&__KERNEL__DTOR__LIST__;
-    for (int i = 0; (int**)&pf[i] != (int**)&__KERNEL__DTOR__END__; i++) {
-        ((void(*)(void))pf[i])();
+    void (**ps)(void);
+    ps = &__KERNEL__DTOR__LIST__;
+    for (int i = 0; ps[i] != __KERNEL__DTOR__END__; i++) {
+        ps[i]();
     }
     return;
 }
