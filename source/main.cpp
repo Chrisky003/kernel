@@ -21,19 +21,30 @@ int main() {
 class CTest {
 public:
 	CTest() {
-		puts("CTest Constructor.");
+		puts("CTest Constructor.\n");
 	}
 	~CTest() {
-		puts("CTest Destructor.");
+		puts("CTest Destructor.\n");
+	}
+public:
+	void func() {
+		puts("now run in \"void CTest::func()\"\n");
+		puts("now run out of \"void CTest::func()\"\n");
 	}
 } test;
 
+CTest test2;
+
 extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {
+	CTest test3;
+	test.func();
+	test2.func();
+	test3.func();
 	init_debug(pmultiboot);
-	clear();
+	// clear();
 	puts("Hello World!\n", color::green, color::red);
 	memManage::init_mm();
-	puts("now run in protected mode.");
+	puts("now run in protected mode.\n");
 
 	//printk("0x%x\n", pmultiboot);
 	//panic("Test!");

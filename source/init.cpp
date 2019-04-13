@@ -1,9 +1,11 @@
 #include "types.h"
+#include "io.h"
+using namespace io::console::real;
 
-void (*__KERNEL__CTOR__LIST__)(void);
-void (*__KERNEL__CTOR__END__)(void);
-void (*__KERNEL__DTOR__LIST__)(void);
-void (*__KERNEL__DTOR__END__)(void);
+extern void (*__KERNEL__CTOR__LIST__)(void);
+extern void (*__KERNEL__CTOR__END__)(void);
+extern void (*__KERNEL__DTOR__LIST__)(void);
+extern void (*__KERNEL__DTOR__END__)(void);
 extern "C" int kernelEntry(MULTIBOOT *pmultiboot);
 extern "C" void init();
 extern "C" void fini();
@@ -11,6 +13,7 @@ extern "C" void stop();
 void *__dso_handle = 0;
 
 extern "C" void _start(MULTIBOOT *pmultiboot) {
+    printk("void(*)() __KERNEL__CTOR__LIST__ = 0x%x\n", __KERNEL__CTOR__LIST__);
     init();
     kernelEntry(pmultiboot);
     fini();
