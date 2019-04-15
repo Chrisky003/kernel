@@ -17,23 +17,18 @@ extern "C" MULTIBOOT *glb_mboot_ptr;
 int main() {
 	return kernelEntry(glb_mboot_ptr);
 }
-class CTest {
-public:
-	CTest() {
-		puts("CTest Constructor.");
-	}
-	~CTest() {
-		puts("CTest Destructor.");
-	}
-}test;
 
 extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {
 	init_debug(pmultiboot);
-	clear();
+	// clear();
 	puts("Hello World!\n", color::green, color::red);
 	memManage::init_mm();
-	puts("now run in protected mode.");
+	puts("now run in protected mode.\n");
 
+	asm("sti");
+	printk("interrupt test\n");
+	asm("int $255");
+	asm("int $80");
 	//printk("0x%x\n", pmultiboot);
 	//panic("Test!");
 	modManager.init();

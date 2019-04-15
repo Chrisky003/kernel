@@ -1,14 +1,19 @@
 #include "types.h"
+#include "io.h"
+using namespace io::console::real;
 
-void (*__KERNEL__CTOR__LIST__)();
-void (*__KERNEL__CTOR__END__)();
-void (*__KERNEL__DTOR__LIST__)();
-void (*__KERNEL__DTOR__END__)();
+extern void (*__KERNEL__CTOR__LIST__)(void);
+extern void (*__KERNEL__CTOR__END__)(void);
+extern void (*__KERNEL__DTOR__LIST__)(void);
+extern void (*__KERNEL__DTOR__END__)(void);
 extern "C" int kernelEntry(MULTIBOOT *pmultiboot);
 extern "C" void init();
 extern "C" void fini();
+extern "C" void stop();
+void *__dso_handle = 0;
 
 extern "C" void _start(MULTIBOOT *pmultiboot) {
+    printk("void(*)() __KERNEL__CTOR__LIST__ = 0x%x\n", __KERNEL__CTOR__LIST__);
     init();
     kernelEntry(pmultiboot);
     fini();
@@ -30,5 +35,17 @@ extern "C" void fini() {
     for (int i = 0; ps[i] != __KERNEL__DTOR__END__; i++) {
         ps[i]();
     }
+    return;
+}
+
+extern "C" void __cxa_pure_virtual() {
+    stop();
+}
+
+extern "C" void _ZdlPvm() {
+    return;
+}
+
+extern "C" void _ZdlPvj() {
     return;
 }
