@@ -1,6 +1,15 @@
-grub2 magic解决方案:
-    ld链接脚本中添加.magic段，用
-    int magic __attribute__((section(".magic"))) =
-    0x1BADB002;
-
-
+内核组织结构：
+	采用module，动态加载。
+	必需modules(编译进内核):
+		1.内存管理(memory management)
+		2.进程管理(process management)
+		3.中断管理(interrupt  management)
+		4.虚拟文件系统(VFS)
+		5.驱动(部分)
+		6.module management
+	通常必须modules:
+		1.timer
+		2.驱动
+		3.IPC 或 message queue
+		4.network  management
+		5.system init
