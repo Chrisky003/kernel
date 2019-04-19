@@ -5,6 +5,7 @@
 #include "CModule.h"
 #include "string.h"
 #include "CModManager.h"
+#include "idt.h"
 using namespace io::console::real_console;
 using namespace debug;
 
@@ -25,6 +26,7 @@ extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {
 	memManage::init_mm();
 	puts("now run in protected mode.\n");
 
+    idt::init_idt();
 	asm("sti");
 	printk("interrupt test\n");
 	asm("int $255");

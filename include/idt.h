@@ -53,98 +53,88 @@ namespace idt {
 }
 
 extern "C" {
+    #define ISR(n) void isr##n()
 	// 声明中断处理函数 0-19 属于 CPU 的异常中断
 	// ISR:中断服务程序(interrupt service routine)
-	void isr0(); 		// 0 #DE 除 0 异常 
-	void isr1(); 		// 1 #DB 调试异常 
-	void isr2(); 		// 2 NMI 
-	void isr3(); 		// 3 BP 断点异常 
-	void isr4(); 		// 4 #OF 溢出 
-	void isr5(); 		// 5 #BR 对数组的引用超出边界 
-	void isr6(); 		// 6 #UD 无效或未定义的操作码 
-	void isr7(); 		// 7 #NM 设备不可用(无数学协处理器) 
-	void isr8(); 		// 8 #DF 双重故障(有错误代码) 
-	void isr9(); 		// 9 协处理器跨段操作 
-	void isr10(); 		// 10 #TS 无效TSS(有错误代码) 
-	void isr11(); 		// 11 #NP 段不存在(有错误代码) 
-	void isr12(); 		// 12 #SS 栈错误(有错误代码) 
-	void isr13(); 		// 13 #GP 常规保护(有错误代码) 
-	void isr14(); 		// 14 #PF 页故障(有错误代码) 
-	void isr15(); 		// 15 CPU 保留 
-	void isr16(); 		// 16 #MF 浮点处理单元错误 
-	void isr17(); 		// 17 #AC 对齐检查 
-	void isr18(); 		// 18 #MC 机器检查 
-	void isr19(); 		// 19 #XM SIMD(单指令多数据)浮点异常
+	ISR(0); 		// 0 #DE 除 0 异常 
+	ISR(1); 		// 1 #DB 调试异常 
+	ISR(2); 		// 2 NMI 
+	ISR(3); 		// 3 BP 断点异常 
+	ISR(4); 		// 4 #OF 溢出 
+	ISR(5); 		// 5 #BR 对数组的引用超出边界 
+	ISR(6); 		// 6 #UD 无效或未定义的操作码 
+	ISR(7); 		// 7 #NM 设备不可用(无数学协处理器) 
+	ISR(8); 		// 8 #DF 双重故障(有错误代码) 
+	ISR(9); 		// 9 协处理器跨段操作 
+	ISR(10); 		// 10 #TS 无效TSS(有错误代码) 
+	ISR(11) 		// 11 #NP 段不存在(有错误代码) 
+	ISR(12); 		// 12 #SS 栈错误(有错误代码) 
+	ISR(13); 		// 13 #GP 常规保护(有错误代码) 
+	ISR(14); 		// 14 #PF 页故障(有错误代码) 
+	ISR(15); 		// 15 CPU 保留 
+	ISR(16); 		// 16 #MF 浮点处理单元错误 
+	ISR(17); 		// 17 #AC 对齐检查 
+	ISR(18); 		// 18 #MC 机器检查 
+	ISR(19); 		// 19 #XM SIMD(单指令多数据)浮点异常
 
 	// 20-31 Intel 保留
-	void isr20();
-	void isr21();
-	void isr22();
-	void isr23();
-	void isr24();
-	void isr25();
-	void isr26();
-	void isr27();
-	void isr28();
-	void isr29();
-	void isr30();
-	void isr31();
+	ISR(20);
+    ISR(21);
+    ISR(22);
+    ISR(23);
+    ISR(24);
+    ISR(25);
+    ISR(26);
+    ISR(27);
+    ISR(28);
+    ISR(29);
+    ISR(30);
+    ISR(31);
 
 	// 32～255 用户自定义异常
-	/*
-	void isr32();
-	void isr33();
-	void isr34();
-	void isr35();
-	void isr36();
-	void isr37();
-	void isr38();
-	void isr39();
-
-	void isr40(); void isr41(); void isr42(); void isr43(); void isr44();
-	void isr45(); void isr46(); void isr47(); void isr48(); void isr49();
-	void isr50(); void isr51(); void isr52(); void isr53(); void isr54();
-	void isr55(); void isr56(); void isr57(); void isr58(); void isr59();
-	void isr60(); void isr61(); void isr62(); void isr63(); void isr64();
-	void isr65(); void isr66(); void isr67(); void isr68(); void isr69();
-	void isr70(); void isr71(); void isr72(); void isr73(); void isr74();
-	void isr75(); void isr76(); void isr77(); void isr78(); void isr79();
-	void isr80(); void isr81(); void isr82(); void isr83(); void isr84();
-	void isr85(); void isr86(); void isr87(); void isr88(); void isr89();
-	void isr90(); void isr91(); void isr92(); void isr93(); void isr94();
-	void isr95(); void isr96(); void isr97(); void isr98(); void isr99();
-	void isr100(); void isr101(); void isr102(); void isr103(); void isr104();
-	void isr105(); void isr106(); void isr107(); void isr108(); void isr109();
-	void isr110(); void isr111(); void isr112(); void isr113(); void isr114();
-	void isr115(); void isr116(); void isr117(); void isr118(); void isr119();
-	void isr120(); void isr121(); void isr122(); void isr123(); void isr124();
-	void isr125(); void isr126(); void isr127(); void isr128(); void isr129();
-	void isr130(); void isr131(); void isr132(); void isr133(); void isr134();
-	void isr135(); void isr136(); void isr137(); void isr138(); void isr139();
-	void isr140(); void isr141(); void isr142(); void isr143(); void isr144();
-	void isr145(); void isr146(); void isr147(); void isr148(); void isr149();
-	void isr150(); void isr151(); void isr152(); void isr153(); void isr154();
-	void isr155(); void isr156(); void isr157(); void isr158(); void isr159();
-	void isr160(); void isr161(); void isr162(); void isr163(); void isr164();
-	void isr165(); void isr166(); void isr167(); void isr168(); void isr169();
-	void isr170(); void isr171(); void isr172(); void isr173(); void isr174();
-	void isr175(); void isr176(); void isr177(); void isr178(); void isr179();
-	void isr180(); void isr181(); void isr182(); void isr183(); void isr184();
-	void isr185(); void isr186(); void isr187(); void isr188(); void isr189();
-	void isr190(); void isr191(); void isr192(); void isr193(); void isr194();
-	void isr195(); void isr196(); void isr197(); void isr198(); void isr199();
-
-	void isr210(); void isr111(); void isr112(); void isr113(); void isr114();
-	void isr115(); void isr116(); void isr117(); void isr118(); void isr119();
-	void isr200(); void isr201(); void isr202(); void isr203(); void isr204();
-	void isr205(); void isr206(); void isr207(); void isr208(); void isr209();
-	void isr220(); void isr221(); void isr222(); void isr223(); void isr224();
-	void isr225(); void isr226(); void isr227(); void isr228(); void isr229();
-	void isr230(); void isr231(); void isr232(); void isr233(); void isr234();
-	void isr235(); void isr236(); void isr237(); void isr238(); void isr239();
-	void isr240(); void isr241(); void isr242(); void isr243(); void isr244();
-	void isr245(); void isr246(); void isr247(); void isr248(); void isr249();
-	void isr250(); void isr251(); void isr252(); void isr253(); void isr254();
-	*/
-	void isr255();
+    ISR(32); ISR(33); ISR(34); ISR(35); ISR(36); 
+    ISR(37); ISR(38); ISR(39); ISR(40); ISR(41); 
+    ISR(42); ISR(43); ISR(44); ISR(45); ISR(46); 
+    ISR(47); ISR(48); ISR(49); ISR(50); ISR(51); 
+    ISR(52); ISR(53); ISR(54); ISR(55); ISR(56); 
+    ISR(57); ISR(58); ISR(59); ISR(60); ISR(61); 
+    ISR(62); ISR(63); ISR(64); ISR(65); ISR(66); 
+    ISR(67); ISR(68); ISR(69); ISR(70); ISR(71); 
+    ISR(72); ISR(73); ISR(74); ISR(75); ISR(76); 
+    ISR(77); ISR(78); ISR(79); ISR(80); ISR(81); 
+    ISR(82); ISR(83); ISR(84); ISR(85); ISR(86); 
+    ISR(87); ISR(88); ISR(89); ISR(90); ISR(91); 
+    ISR(92); ISR(93); ISR(94); ISR(95); ISR(96); 
+    ISR(97); ISR(98); ISR(99); ISR(100); ISR(101); 
+    ISR(102); ISR(103); ISR(104); ISR(105); ISR(106); 
+    ISR(107); ISR(108); ISR(109); ISR(110); ISR(111); 
+    ISR(112); ISR(113); ISR(114); ISR(115); ISR(116); 
+    ISR(117); ISR(118); ISR(119); ISR(120); ISR(121); 
+    ISR(122); ISR(123); ISR(124); ISR(125); ISR(126); 
+    ISR(127); ISR(128); ISR(129); ISR(130); ISR(131); 
+    ISR(132); ISR(133); ISR(134); ISR(135); ISR(136); 
+    ISR(137); ISR(138); ISR(139); ISR(140); ISR(141); 
+    ISR(142); ISR(143); ISR(144); ISR(145); ISR(146); 
+    ISR(147); ISR(148); ISR(149); ISR(150); ISR(151); 
+    ISR(152); ISR(153); ISR(154); ISR(155); ISR(156); 
+    ISR(157); ISR(158); ISR(159); ISR(160); ISR(161); 
+    ISR(162); ISR(163); ISR(164); ISR(165); ISR(166); 
+    ISR(167); ISR(168); ISR(169); ISR(170); ISR(171); 
+    ISR(172); ISR(173); ISR(174); ISR(175); ISR(176); 
+    ISR(177); ISR(178); ISR(179); ISR(180); ISR(181); 
+    ISR(182); ISR(183); ISR(184); ISR(185); ISR(186); 
+    ISR(187); ISR(188); ISR(189); ISR(190); ISR(191); 
+    ISR(192); ISR(193); ISR(194); ISR(195); ISR(196); 
+    ISR(197); ISR(198); ISR(199); ISR(200); ISR(201); 
+    ISR(202); ISR(203); ISR(204); ISR(205); ISR(206); 
+    ISR(207); ISR(208); ISR(209); ISR(210); ISR(211); 
+    ISR(212); ISR(213); ISR(214); ISR(215); ISR(216); 
+    ISR(217); ISR(218); ISR(219); ISR(220); ISR(221); 
+    ISR(222); ISR(223); ISR(224); ISR(225); ISR(226); 
+    ISR(227); ISR(228); ISR(229); ISR(230); ISR(231); 
+    ISR(232); ISR(233); ISR(234); ISR(235); ISR(236); 
+    ISR(237); ISR(238); ISR(239); ISR(240); ISR(241); 
+    ISR(242); ISR(243); ISR(244); ISR(245); ISR(246); 
+    ISR(247); ISR(248); ISR(249); ISR(250); ISR(251); 
+    ISR(252); ISR(253); ISR(254); ISR(255);
 }
