@@ -14,7 +14,7 @@ namespace idt {
     interrupt_handler_t interrupt_handlers[256];
 
     // 设置中断描述符
-    static void idt_set_gate(uint8 num, uint32 base, uint16 sel, uint8 flags);
+    static void idt_set_gate(uint8 num, uint32 base, uint16 sel = 0x08, uint8 flags = 0x8E);
 
     // 声明加载 IDTR 的函数
     extern "C" void idt_flush(uint32);
@@ -28,7 +28,7 @@ namespace idt {
         idt_ptr.base  = (uint32)&idt_entries;
         
         bzero((uint8 *)&idt_entries, sizeof(idt_entry_t) * 256);
-        #define IDT_SER_GATE(n,arg...) idt_set_gate(n,(uint32)isr##n,arg...)
+        #define IDT_SET_GATE(n,arg...) idt_set_gate(n,(uint32)isr##n,##arg)
         // 0-32:  用于 CPU 的中断处理
         idt_set_gate( 0, (uint32)isr0,  0x08, 0x8E);
         idt_set_gate( 1, (uint32)isr1,  0x08, 0x8E);
