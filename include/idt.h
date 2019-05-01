@@ -50,6 +50,9 @@ namespace idt {
 
 	// 调用中断处理函数
 	extern "C" void isr_handler(pt_regs *regs);
+
+	// IRQ 处理函数
+	void irq_handler(pt_regs *regs);
 }
 
 extern "C" {
@@ -137,4 +140,45 @@ extern "C" {
     ISR(242); ISR(243); ISR(244); ISR(245); ISR(246); 
     ISR(247); ISR(248); ISR(249); ISR(250); ISR(251); 
     ISR(252); ISR(253); ISR(254); ISR(255);
+
+	// 定义IRQ
+	#define  IRQ0     32 	// 电脑系统计时器
+	#define  IRQ1     (IRQ0 + 1) 	// 键盘
+	#define  IRQ2     (IRQ0 + 2) 	// 与 IRQ9 相接，MPU-401 MD 使用
+	#define  IRQ3     (IRQ0 + 3) 	// 串口设备
+	#define  IRQ4     (IRQ0 + 4) 	// 串口设备
+	#define  IRQ5     (IRQ0 + 5) 	// 建议声卡使用
+	#define  IRQ6     (IRQ0 + 6) 	// 软驱传输控制使用
+	#define  IRQ7     (IRQ0 + 7) 	// 打印机传输控制使用
+	#define  IRQ8     (IRQ0 + 8) 	// 即时时钟
+	#define  IRQ9     (IRQ0 + 9) 	// 与 IRQ2 相接，可设定给其他硬件
+	#define  IRQ10    (IRQ0 + 10) 	// 建议网卡使用
+	#define  IRQ11    (IRQ0 + 11) 	// 建议 AGP 显卡使用
+	#define  IRQ12    (IRQ0 + 12)	// 接 PS/2 鼠标，也可设定给其他硬件
+	#define  IRQ13    (IRQ0 + 13) 	// 协处理器使用
+	#define  IRQ14    (IRQ0 + 14) 	// IDE0 传输控制使用
+	#define  IRQ15    (IRQ0 + 15) 	// IDE1 传输控制使用
+
+	#define IRQ(n) void irq##n()
+
+	// 声明 IRQ 函数
+	// IRQ:中断请求(Interrupt Request)
+	IRQ(0);		// 电脑系统计时器
+	IRQ(1); 		// 键盘
+	IRQ(2); 		// 与 IRQ9 相接，MPU-401 MD 使用
+	IRQ(3); 		// 串口设备
+	IRQ(4); 		// 串口设备
+	IRQ(5); 		// 建议声卡使用
+	IRQ(6); 		// 软驱传输控制使用
+	IRQ(7); 		// 打印机传输控制使用
+	IRQ(8); 		// 即时时钟
+	IRQ(9); 		// 与 IRQ2 相接，可设定给其他硬件
+	IRQ(10); 		// 建议网卡使用
+	IRQ(11); 		// 建议 AGP 显卡使用
+	IRQ(12); 		// 接 PS/2 鼠标，也可设定给其他硬件
+	IRQ(13); 		// 协处理器使用
+	IRQ(14); 		// IDE0 传输控制使用
+	IRQ(15); 		// IDE1 传输控制使用
 }
+
+

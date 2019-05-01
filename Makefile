@@ -65,7 +65,7 @@ debug: kernel
 .PHONY: run
 run: kernel
 	@$(MAKE) update
-	@qemu-system-i386 -hda ~/Desktop/floppy.img
+	@qemu-system-x86_64 -hda ~/Desktop/floppy.img
 
 .PHONY: clean
 clean:

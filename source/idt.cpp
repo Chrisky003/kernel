@@ -2,6 +2,8 @@
 #include "io.h"
 #include "string.h"
 using namespace lib::string;
+using namespace io::port;
+extern "C" void stop();
 
 namespace idt {
     // 中断描述符表
@@ -111,6 +113,17 @@ namespace idt {
         // 255 将来用于实现系统调用
         idt_set_gate(255, (uint32)isr255, 0x08, 0x8E);
 
+        out8(0x20, 0x11);
+        out8(0xA0, 0x11);
+        out8(0x21, 0x20);
+        out8(0xA1, 0x28);
+        out8(0x21, 0x04);
+        out8(0xA1, 0x02);
+        out8(0x21, 0x01);
+        out8(0xA1, 0x01);
+        out8(0x21, 0x0);
+        out8(0xA1, 0x0);
+
         // 更新设置中断描述符表
         idt_flush((uint32)&idt_ptr);
     }
@@ -132,10 +145,32 @@ namespace idt {
     // 调用中断处理函数
     extern "C" void isr_handler(pt_regs *regs)
     {
+        if (regs->int_no >= 32 && regs->int_no <= 47) {
+            irq_handler(regs);
+        }
+        else if (interrupt_handlers[regs->int_no]) {
+            interrupt_handlers[regs->int_no](regs);
+        }
+        else {
+            io::console::real::printk_color(io::console::real::color::black, io::console::real::color::blue, "Unhandled interrupt: %d\n", regs->int_no);
+            //stop();
+        }
+    }
+
+    void irq_handler(pt_regs *regs) {
+        // 发送中断结束信号给 PICs
+        // 按照我们的设置，从 32 号中断起为用户自定义中断
+        // 因为单片的 Intel 8259A 芯片只能处理 8 级中断
+        // 故大于等于 40 的中断号是由从片处理的
+        if (regs->int_no >= 40) {
+            // 发送重设信号给从片
+            out8(0xA0, 0x20);
+        }
+        // 发送重设信号给主片
+        out8(0x20, 0x20);
+
         if (interrupt_handlers[regs->int_no]) {
             interrupt_handlers[regs->int_no](regs);
-        } else {
-            io::console::real::printk_color(io::console::real::color::black, io::console::real::color::blue, "Unhandled interrupt: %d\n", regs->int_no);
         }
     }
 

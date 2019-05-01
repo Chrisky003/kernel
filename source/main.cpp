@@ -6,6 +6,7 @@
 #include "string.h"
 #include "CModManager.h"
 #include "idt.h"
+#include "timer.h"
 using namespace io::console::real_console;
 using namespace debug;
 
@@ -27,12 +28,15 @@ extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {
 	puts("now run in protected mode.\n");
 
     idt::init_idt();
-	asm("sti");
 	printk("interrupt test\n");
 	asm("int $255");
 	asm("int $80");
 	//printk("0x%x\n", pmultiboot);
 	//panic("Test!");
+	printk("interrupt test finished.\n");
+	putc('\n');
+	init_timer(1000);
 	modManager.init();
+	asm("sti");
 	return 0;
 }

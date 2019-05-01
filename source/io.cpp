@@ -56,6 +56,10 @@ namespace io{
 				move_cursor(0, 0);
 			}
 			void move_cursor(int x, int y) {
+				if (x == -1)
+					x = real::x;
+				if (y == -1)
+					y = real::y;
 				uint16 location = y * 80 + x;
 				port::out8(0x3D4, 14);
 				port::out8(0x3D5, location >> 8);
@@ -67,10 +71,10 @@ namespace io{
 			void move_cursor(POINT p) {
 				move_cursor(p.x, p.y);
 			}
-			void putc(char c, color back, color fore) {
+			void putc_nomove(char c, color back, color fore, POINT &p) {
 				uint16 attribute = ((back << 4) | (fore & 0x0F)) << 8;
 
-				POINT p(x, y);
+				//POINT p(x, y);
 				// 0x08 是 退格键 的 ASCII 码
 				// 0x09 是 tab 键 的 ASCII 码
 				if (c == 0x08 && x) {
@@ -111,14 +115,22 @@ namespace io{
 					// 向上移动了一行，所以 cursor_y 现在是 24
 					p.y = 24;
 				}
-
+			}
+			void putc(char c, color back, color fore) {
+				POINT p(x, y);
+				putc_nomove(c, back, fore, p);
+				
 				// 移动硬件的输入光标
 				move_cursor(p);
 			}
 			void puts(char str[], color back, color fore) {
+				POINT p(x, y);
 				for (int i = 0; str[i] != '\0'; i++) {
-					putc(str[i], back, fore);
+					putc_nomove(str[i], back, fore, p);
 				}
+				
+				// 移动硬件的输入光标
+				move_cursor(p);
 			}
 			static int vsprintf(char *buff, const char *format, va_list args);
 			void printk(const char *format, ...)
