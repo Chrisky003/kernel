@@ -15,7 +15,6 @@ namespace memManage {
     extern uint32 stack;
     extern "C" void gdt_flush(GDT_PTR *pgdt);
 
-    extern "C" void gdt_flush(GDT_PTR *pgdt);
     // 初始化全局描述符表
     void init_mm()
     {

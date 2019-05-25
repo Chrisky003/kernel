@@ -13,7 +13,6 @@ extern "C" void stop();
 void *__dso_handle = 0;
 
 extern "C" void _start(MULTIBOOT *pmultiboot) {
-    printk("void(*)() __KERNEL__CTOR__LIST__ = 0x%x\n", __KERNEL__CTOR__LIST__);
     init();
     kernelEntry(pmultiboot);
     fini();

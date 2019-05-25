@@ -4,7 +4,7 @@ MBOOT_HEADER_MAGIC 	equ 	0x1BADB002	; Multiboot 魔数，由规范决定的
 MBOOT_PAGE_ALIGN 	equ 	1 << 0		; 0 号位表示所有的引导模块将按页(4KB)边界对齐
 MBOOT_MEM_INFO 		equ 	1 << 1		; 1 号位通过 Multiboot 信息结构的 mem_* 域包括可用内存的信息
 MBOOT_CMDLINE       equ     1 << 2      ; 2 号位表示启用命令行参数
-MBOOT_HEADER_FLAGS 	equ 	MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO
+MBOOT_HEADER_FLAGS 	equ 	MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO | MBOOT_CMDLINE
 MBOOT_CHECKSUM 		equ 	-(MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 
 [BITS 32]  	; 所有代码以 32-bit 的方式编译
@@ -42,33 +42,8 @@ start:
 	call _start
 	; call kernelEntry		 ; 调用内核入口函数
 stop:
-	hlt
+	; hlt
 	jmp stop
-
-; cons:
-; 	mov    eax,__CTOR_LIST__
-; 	cmp    eax,0xffffffff
-; 	je     end
-; 	push   ebp
-; 	mov    ebp,esp
-; 	push   ebx
-; 	mov    ebx,__CTOR_LIST__
-; 	sub    esp,0x4
-; 	lea    esi,[esi+0x0]
-; 	lea    edi,[edi+0*1+0x0]
-; .i:
-; 	sub    ebx,0x4
-; 	call   eax
-; 	mov    eax,[ebx]
-; 	cmp    eax,0xffffffff
-; 	jne    .i
-; 	add    esp,0x4
-; 	pop    ebx
-; 	pop    ebp
-; 	ret    
-; 	lea    esi,[esi+0x0]
-; end:
-; 	repz ret 
 
 section .bss align=16				; 未初始化的数据段从这里开始
 stack:
