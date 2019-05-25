@@ -1,7 +1,5 @@
-#include "idt.h"
-#include "io.h"
-#include "string.h"
-using namespace lib::string;
+#include "mm/idt.h"
+#include "stdlib.h"
 using namespace io::port;
 extern "C" void stop();
 

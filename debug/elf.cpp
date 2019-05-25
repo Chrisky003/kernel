@@ -1,8 +1,7 @@
-#include "types.h"
 #include "elf.h"
-#include "string.h"
+#include "stdlib.h"
 
-namespace lib::elf {
+namespace elf {
     // 从 multiboot_t 结构获取ELF信息
     ELF elf_from_multiboot(MULTIBOOT *mb)
     {
@@ -14,11 +13,11 @@ namespace lib::elf {
         for (i = 0; i < mb->num; i++) {
             const char *name = (const char *)(shstrtab + sh[i].name);
             // 在 GRUB 提供的 multiboot 信息中寻找内核 ELF 格式所提取的字符串表和符号表
-            if (lib::string::strcmp(name, ".strtab") == 0) {
+            if (strcmp(name, ".strtab") == 0) {
                 elf.strtab = (const char *)sh[i].addr;
                 elf.strtabsz = sh[i].size;
             }
-            if (lib::string::strcmp(name, ".symtab") == 0) {
+            if (strcmp(name, ".symtab") == 0) {
                 elf.symtab = (ELF_SYMBOL*)sh[i].addr;
                 elf.symtabsz = sh[i].size;
             }

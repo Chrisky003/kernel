@@ -1,12 +1,8 @@
-#include "types.h"
-#include "io.h"
-#include "debug.h"
-#include "memManage.h"
-#include "CModule.h"
-#include "string.h"
-#include "CModManager.h"
-#include "idt.h"
-#include "timer.h"
+#include "stdlib.h"
+#include "debug/debug.h"
+#include "mm/memManage.h"
+#include "mm/idt.h"
+#include "timer/timer.h"
 using namespace io::console::real_console;
 using namespace debug;
 
@@ -36,7 +32,6 @@ extern "C" int kernelEntry(MULTIBOOT *pmultiboot) {
 	printk("interrupt test finished.\n");
 	putc('\n');
 	init_timer(1000);
-	modManager.init();
 	asm("sti");
 	return 0;
 }

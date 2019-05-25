@@ -7,7 +7,7 @@ MAKE=make
 empty:=
 space:=$(empty) $(empty)
 
-SOURCES=$(wildcard source/*.s) $(wildcard source/*.c) $(wildcard source/*.cpp)
+SOURCES:=$(foreach i,*.cpp *.c *.s,$(shell find -name $(i)))
 # SOURCE:=$(wildcard */)
 OBJECTS:=$(foreach i,$(SOURCES),$(i).o)
 
@@ -69,11 +69,9 @@ run: kernel
 
 .PHONY: clean
 clean:
-	@echo RM   source/*.o
-	@rm -rf source/*.o
+	@$(foreach i,$(OBJECTS),echo RM   $(i); rm -rf $(i); )
 	@echo RM   kernel
 	@rm -rf kernel
-	@echo 清理完成!
 
 PHONY += FORCE
 FORCE:

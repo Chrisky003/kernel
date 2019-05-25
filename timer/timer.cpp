@@ -1,6 +1,5 @@
-#include "idt.h"
-#include "types.h"
-#include "io.h"
+#include "mm/idt.h"
+#include "stdlib.h"
 using namespace io::port;
 using namespace io::console::real;
 

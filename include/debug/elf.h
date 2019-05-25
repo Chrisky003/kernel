@@ -1,7 +1,7 @@
 #pragma once
 #include "types.h"
 
-namespace lib::elf {
+namespace elf {
     // 从 multiboot_t 结构获取ELF信息
     ELF elf_from_multiboot(MULTIBOOT *mb);
 

@@ -1,5 +1,4 @@
-#include "types.h"
-#include "io.h"
+#include "stdlib.h"
 using namespace io::console::real;
 
 extern void (*__KERNEL__CTOR__LIST__)(void);

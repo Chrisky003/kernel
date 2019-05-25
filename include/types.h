@@ -87,42 +87,40 @@ typedef struct MULTIBOOT
 
 #define ELF32_ST_TYPE(i) ((i)&0xf)
 
-namespace lib::elf {
-	// ELF 格式区段头
-	typedef
-	struct ELF_SECTION_HEADER {
-	uint32 name;
-	uint32 type;
-	uint32 flags;
-	uint32 addr;
-	uint32 offset;
-	uint32 size;
-	uint32 link;
-	uint32 info;
-	uint32 addralign;
-	uint32 entsize;
-	} __attribute__((packed)) ELF_SECTION_HEADER;
+// ELF 格式区段头
+typedef
+struct ELF_SECTION_HEADER {
+uint32 name;
+uint32 type;
+uint32 flags;
+uint32 addr;
+uint32 offset;
+uint32 size;
+uint32 link;
+uint32 info;
+uint32 addralign;
+uint32 entsize;
+} __attribute__((packed)) ELF_SECTION_HEADER;
 
-	// ELF 格式符号
-	typedef
-	struct ELF_SYMBOL {
-	uint32 name;
-	uint32 value;
-	uint32 size;
-	uint8  info;
-	uint8  other;
-	uint16 shndx;
-	} __attribute__((packed)) ELF_SYMBOL;
+// ELF 格式符号
+typedef
+struct ELF_SYMBOL {
+uint32 name;
+uint32 value;
+uint32 size;
+uint8  info;
+uint8  other;
+uint16 shndx;
+} __attribute__((packed)) ELF_SYMBOL;
 
-	// ELF 信息
-	typedef
-	struct ELF {
-	ELF_SYMBOL *symtab;
-	uint32      symtabsz;
-	const char   *strtab;
-	uint32      strtabsz;
-	} ELF;
-}
+// ELF 信息
+typedef
+struct ELF {
+ELF_SYMBOL *symtab;
+uint32      symtabsz;
+const char   *strtab;
+uint32      strtabsz;
+} ELF;
 
 #define assert(x, info)                                       	\
 	do {                                                	\
@@ -134,3 +132,4 @@ namespace lib::elf {
 // 编译期间静态检测
 #define static_assert(x)                                	\
 	switch (x) { case 0: case (x): ; }
+

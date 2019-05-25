@@ -1,5 +1,5 @@
 #include "types.h"
-#include "memManage.h"
+#include "mm/memManage.h"
 using namespace memManage;
 
 namespace memManage {

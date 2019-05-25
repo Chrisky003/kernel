@@ -33,7 +33,6 @@
 *.app
 
 #自定义
-/obj
 /kernel
 !/lib
-/.vscode/ipch
+/.vscode

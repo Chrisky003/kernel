@@ -1,6 +1,4 @@
-#include "string.h"
-using namespace lib::string;
-#include "io.h"
+#include "stdlib.h"
 
 namespace io{
 	namespace port {
