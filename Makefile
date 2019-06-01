@@ -43,17 +43,15 @@ kernel: $(OBJECTS)
 #	@echo CC  $<
 #	@$(CC) $(C_FLAGS) $< -o $@
 
-DEVICE:=
+depence:
+	@$(CPP) $(C_FLAGS) -M $(SOURCES)
+
 .PHONY: update
-update:DEVICE:=$(shell losetup -f)
 update:
-	@echo device: $(DEVICE)
-	@sudo losetup -P $(DEVICE) ~/Desktop/floppy.img
-	@sudo mount $(DEVICE)p1 /mnt
-	@sudo cp kernel /mnt/
-	@sleep 1
-	@sudo umount /mnt
-	@sudo losetup -d $(DEVICE)
+	@DEVICE=`losetup -f`&& echo device: $DEVICE&& \
+	sudo losetup -P $DEVICE ~/Desktop/floppy.img&& \
+	sudo mount $DEVICEp1 /mnt&& sudo cp kernel /mnt/&& sleep 1&& sudo umount /mnt&& \
+	sudo losetup -d $DEVICE
 
 .PHONY:debug
 debug: kernel
@@ -84,3 +82,4 @@ ECHO:=
 .PHONY: ECHO
 ECHO:
 	echo $(ECHO)
+

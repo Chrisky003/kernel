@@ -20,8 +20,7 @@ namespace idt {
     extern "C" void idt_flush(uint32);
 
     // 初始化中断描述符表
-    void init_idt()
-    {	
+    void init_idt() {	
         bzero((uint8 *)&interrupt_handlers, sizeof(interrupt_handler_t) * 256);
         
         idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;
@@ -67,7 +66,7 @@ namespace idt {
         IDT_SET_GATE(37); IDT_SET_GATE(38); IDT_SET_GATE(39); IDT_SET_GATE(40); IDT_SET_GATE(41); 
         IDT_SET_GATE(42); IDT_SET_GATE(43); IDT_SET_GATE(44); IDT_SET_GATE(45); IDT_SET_GATE(46); 
         IDT_SET_GATE(47); 
-        for (int i = 49; i < 255; i++) {
+        for (int i = 48; i < 255; i++) {
             idt_set_gate(i, (uint32)isr48, 0x08, 0x8E);
         }
         // 255 将来用于实现系统调用
@@ -106,31 +105,23 @@ namespace idt {
     extern "C" void isr_handler(pt_regs *regs)
     {
         if (regs->int_no >= 32 && regs->int_no <= 47) {
-            irq_handler(regs);
+            // 发送中断结束信号给 PICs
+            // 按照我们的设置，从 32 号中断起为用户自定义中断
+            // 因为单片的 Intel 8259A 芯片只能处理 8 级中断
+            // 故大于等于 40 的中断号是由从片处理的
+            if (regs->int_no >= 40) {
+                // 发送重设信号给从片
+               out8(0xA0, 0x20);
+            }
+            // 发送重设信号给主片
+            out8(0x20, 0x20);
         }
-        else if (interrupt_handlers[regs->int_no]) {
+        if (interrupt_handlers[regs->int_no]) {
             interrupt_handlers[regs->int_no](regs);
         }
         else {
             io::console::real::printk_color(io::console::real::color::black, io::console::real::color::blue, "Unhandled interrupt: %d\n", regs->int_no);
             //stop();
-        }
-    }
-
-    void irq_handler(pt_regs *regs) {
-        // 发送中断结束信号给 PICs
-        // 按照我们的设置，从 32 号中断起为用户自定义中断
-        // 因为单片的 Intel 8259A 芯片只能处理 8 级中断
-        // 故大于等于 40 的中断号是由从片处理的
-        if (regs->int_no >= 40) {
-            // 发送重设信号给从片
-            out8(0xA0, 0x20);
-        }
-        // 发送重设信号给主片
-        out8(0x20, 0x20);
-
-        if (interrupt_handlers[regs->int_no]) {
-            interrupt_handlers[regs->int_no](regs);
         }
     }
 
@@ -140,3 +131,4 @@ namespace idt {
         interrupt_handlers[n] = h;
     }
 }
+
