@@ -133,3 +133,5 @@ uint32      strtabsz;
 #define static_assert(x)                                	\
 	switch (x) { case 0: case (x): ; }
 
+extern uint32 kern_start[], kern_end[], kern_stack[];
+#define STACK_SIZE 32768

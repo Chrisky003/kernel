@@ -26,6 +26,7 @@ extern _start
 global __cxa_pure_virtual
 global _ZdlPvm
 global stop
+global kern_stack
 [EXTERN kernelEntry] 	; 声明内核 C 代码的入口函数
 
 start:
@@ -42,11 +43,12 @@ start:
 	call _start
 	; call kernelEntry		 ; 调用内核入口函数
 stop:
-	; hlt
+	hlt
 	jmp stop
 
 section .bss align=16				; 未初始化的数据段从这里开始
 stack:
+kern_stack equ $
 	resb 32768	 ; 这里作为内核栈
 glb_mboot_ptr: 			 ; 全局的 multiboot 结构体指针
 	resb 4

@@ -28,8 +28,11 @@ ENTRY(start)
 SECTIONS
 {
 	.multiboot     : { *(.multiboot) }
+  PROVIDE( kern_start = 0x100000 );
+  . = 0x100000;
+  .system.reserved : { *(.page.needed .malloc.needed) }
   /* Read-only sections, merged into text segment: */
-  PROVIDE (__executable_start = SEGMENT_START("text-segment", 0x100000)); . = SEGMENT_START("text-segment", 0x100000) + SIZEOF_HEADERS;
+  PROVIDE (__executable_start = SEGMENT_START("text-segment", 0x540400)); . = SEGMENT_START("text-segment", 0x540400) + SIZEOF_HEADERS;
   .interp         : { *(.interp) }
   .note.gnu.build-id : { *(.note.gnu.build-id) }
   .hash           : { *(.hash) }
@@ -212,6 +215,7 @@ SECTIONS
   }
   . = ALIGN(64 / 8);
   _end = .; PROVIDE (end = .);
+  PROVIDE( kern_end = . );
   . = DATA_SEGMENT_END (.);
   /* Stabs debugging sections.  */
   .stab          0 : { *(.stab) }
