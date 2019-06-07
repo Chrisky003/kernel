@@ -48,10 +48,10 @@ depence:
 
 .PHONY: update
 update:
-	@DEVICE=`losetup -f`&& echo device: $DEVICE&& \
-	sudo losetup -P $DEVICE ~/Desktop/floppy.img&& \
-	sudo mount $DEVICEp1 /mnt&& sudo cp kernel /mnt/&& sleep 1&& sudo umount /mnt&& \
-	sudo losetup -d $DEVICE
+	@DEVICE=`losetup -f` && echo device: $$DEVICE && \
+	sudo losetup -P $$DEVICE ~/Desktop/floppy.img && \
+	sudo mount "$$DEVICE"p1 /mnt && sudo cp kernel /mnt/ && sleep 1&& sudo umount /mnt && \
+	sudo losetup -d $$DEVICE
 
 .PHONY:debug
 debug: kernel
