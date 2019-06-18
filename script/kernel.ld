@@ -30,7 +30,7 @@ SECTIONS
 	.multiboot     : { *(.multiboot) }
   PROVIDE( kern_start = 0x100000 );
   . = 0x100000;
-  .system.reserved : { *(.page.needed .malloc.needed) }
+  .system.reserved : { . = ALIGN(4096); *(.page.needed .malloc.needed) }
   /* Read-only sections, merged into text segment: */
   PROVIDE (__executable_start = SEGMENT_START("text-segment", 0x540400)); . = SEGMENT_START("text-segment", 0x540400) + SIZEOF_HEADERS;
   .interp         : { *(.interp) }
@@ -215,48 +215,48 @@ SECTIONS
   }
   . = ALIGN(64 / 8);
   _end = .; PROVIDE (end = .);
-  PROVIDE( kern_end = . );
   . = DATA_SEGMENT_END (.);
   /* Stabs debugging sections.  */
-  .stab          0 : { *(.stab) }
-  .stabstr       0 : { *(.stabstr) }
-  .stab.excl     0 : { *(.stab.excl) }
-  .stab.exclstr  0 : { *(.stab.exclstr) }
-  .stab.index    0 : { *(.stab.index) }
-  .stab.indexstr 0 : { *(.stab.indexstr) }
-  .comment       0 : { *(.comment) }
+  .stab           : { *(.stab) }
+  .stabstr        : { *(.stabstr) }
+  .stab.excl      : { *(.stab.excl) }
+  .stab.exclstr   : { *(.stab.exclstr) }
+  .stab.index     : { *(.stab.index) }
+  .stab.indexstr  : { *(.stab.indexstr) }
+  .comment        : { *(.comment) }
   /* DWARF debug sections.
      Symbols in the DWARF debugging sections are relative to the beginning
      of the section so we begin them at 0.  */
   /* DWARF 1 */
-  .debug          0 : { *(.debug) }
-  .line           0 : { *(.line) }
+  .debug           : { *(.debug) }
+  .line            : { *(.line) }
   /* GNU DWARF 1 extensions */
-  .debug_srcinfo  0 : { *(.debug_srcinfo) }
-  .debug_sfnames  0 : { *(.debug_sfnames) }
+  .debug_srcinfo   : { *(.debug_srcinfo) }
+  .debug_sfnames   : { *(.debug_sfnames) }
   /* DWARF 1.1 and DWARF 2 */
-  .debug_aranges  0 : { *(.debug_aranges) }
-  .debug_pubnames 0 : { *(.debug_pubnames) }
+  .debug_aranges   : { *(.debug_aranges) }
+  .debug_pubnames  : { *(.debug_pubnames) }
   /* DWARF 2 */
-  .debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
-  .debug_abbrev   0 : { *(.debug_abbrev) }
-  .debug_line     0 : { *(.debug_line .debug_line.* .debug_line_end ) }
-  .debug_frame    0 : { *(.debug_frame) }
-  .debug_str      0 : { *(.debug_str) }
-  .debug_loc      0 : { *(.debug_loc) }
-  .debug_macinfo  0 : { *(.debug_macinfo) }
+  .debug_info      : { *(.debug_info .gnu.linkonce.wi.*) }
+  .debug_abbrev    : { *(.debug_abbrev) }
+  .debug_line      : { *(.debug_line .debug_line.* .debug_line_end ) }
+  .debug_frame     : { *(.debug_frame) }
+  .debug_str       : { *(.debug_str) }
+  .debug_loc       : { *(.debug_loc) }
+  .debug_macinfo   : { *(.debug_macinfo) }
   /* SGI/MIPS DWARF 2 extensions */
-  .debug_weaknames 0 : { *(.debug_weaknames) }
-  .debug_funcnames 0 : { *(.debug_funcnames) }
-  .debug_typenames 0 : { *(.debug_typenames) }
-  .debug_varnames  0 : { *(.debug_varnames) }
+  .debug_weaknames  : { *(.debug_weaknames) }
+  .debug_funcnames  : { *(.debug_funcnames) }
+  .debug_typenames  : { *(.debug_typenames) }
+  .debug_varnames   : { *(.debug_varnames) }
   /* DWARF 3 */
-  .debug_pubtypes 0 : { *(.debug_pubtypes) }
-  .debug_ranges   0 : { *(.debug_ranges) }
+  .debug_pubtypes  : { *(.debug_pubtypes) }
+  .debug_ranges    : { *(.debug_ranges) }
   /* DWARF Extension.  */
-  .debug_macro    0 : { *(.debug_macro) }
-  .debug_addr     0 : { *(.debug_addr) }
-  .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
+  .debug_macro     : { *(.debug_macro) }
+  .debug_addr      : { *(.debug_addr) }
+  .gnu.attributes  : { KEEP (*(.gnu.attributes)) }
+  PROVIDE( kern_end = . );
   /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
 }
 

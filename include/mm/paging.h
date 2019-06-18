@@ -1,5 +1,6 @@
 #pragma once
 #include "stdlib.h"
+#include "mm/idt.h"
 
 namespace paging {
     // reference from libsystem.
@@ -26,4 +27,5 @@ namespace paging {
     };
     extern PDE pd[1024];
     extern PTE pt[1024][1024];
+    void pageFaultHandler(idt::pt_regs *pregs);
 }
