@@ -1,7 +1,7 @@
-# Utopia kernel
+# Kernel
 ---
 
-乌托邦计划的操作系统内核。
+i386架构操作系统内核。
 
 references:  
 * [Intel® 64 and IA-32 Architectures Software Developer's Manual Combined Volumes 3A, 3B, 3C, and 3D: System Programming Guide](https://software.intel.com/sites/default/files/managed/a4/60/325384-sdm-vol-3abcd.pdf)  
