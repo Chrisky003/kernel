@@ -32,7 +32,7 @@
 *.out
 *.app
 
-#自定义
+# Custom
+/.vscode
 /kernel
 !/lib
-/.vscode
