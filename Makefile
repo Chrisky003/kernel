@@ -1,13 +1,13 @@
 ASM=nasm
 CROSS:=i686-linux-gnu
-CC=$(CROSS)-gcc
-CPP=$(CROSS)-g++
+CC=$(CROSS)-gcc-8
+CPP=$(CROSS)-g++-8
 LD=$(CROSS)-ld
 MAKE=make
 empty:=
 space:=$(empty) $(empty)
 
-SOURCES:=$(foreach i,*.cpp *.c *.s,$(shell find -name $(i)))
+SOURCES:=$(foreach i,*.cpp *.c *.s,$(shell find ./ -name $(i)))
 # SOURCE:=$(wildcard */)
 OBJECTS:=$(foreach i,$(SOURCES),$(i).o)
 
@@ -46,30 +46,26 @@ kernel: $(OBJECTS)
 depence:
 	@$(CPP) $(C_FLAGS) -M $(SOURCES)
 
-.PHONY: update
-update:
-	@DEVICE=`losetup -f` && echo device: $$DEVICE && \
-	sudo losetup -P $$DEVICE ~/Desktop/floppy.img && \
-	sudo mount "$$DEVICE"p1 /mnt && sudo cp kernel /mnt/ && sleep 1&& sudo umount /mnt && \
-	sudo losetup -d $$DEVICE
+# .PHONY: update
+# update:
+# 	@DEVICE=`losetup -f` && echo device: $$DEVICE && \
+# 	sudo losetup -P $$DEVICE ~/Desktop/floppy.img && \
+# 	sudo mount "$$DEVICE"p1 /mnt && sudo cp kernel /mnt/ && sleep 1&& sudo umount /mnt && \
+# 	sudo losetup -d $$DEVICE
 
 .PHONY:debug
 debug: kernel
-	@$(MAKE) update
-	@qemu-system-i386 -S -s -hda ~/Desktop/floppy.img &
+	@qemu-system-i386 -S -s -kernel kernel &
 	@sleep 1
-	@gdb -tui -x script/gdbinit
+	@gdb -x script/gdbinit
 
 .PHONY: run
 run: kernel
-	@$(MAKE) update
-	@qemu-system-x86_64 -hda ~/Desktop/floppy.img
+	@qemu-system-i386 -kernel kernel
 
 .PHONY: clean
 clean:
-	@$(foreach i,$(OBJECTS),echo RM   $(i); rm -rf $(i); )
-	@echo RM   kernel
-	@rm -rf kernel
+	@$(foreach i,$(OBJECTS) ./kernel,echo RM   $(i); rm -rf $(i); )
 
 PHONY += FORCE
 FORCE:
